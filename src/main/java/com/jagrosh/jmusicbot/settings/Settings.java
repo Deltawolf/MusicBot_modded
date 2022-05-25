@@ -182,7 +182,7 @@ public class Settings implements GuildSettingsProvider
         this.manager.writeSettings();
     }
 
-    public void setSFXPath(string path)
+    public void setSFXPath(String path)
     {
         this.sfx_path = path;
         this.manager.writeSettings();
