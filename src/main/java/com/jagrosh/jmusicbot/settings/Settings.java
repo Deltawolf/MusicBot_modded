@@ -181,4 +181,10 @@ public class Settings implements GuildSettingsProvider
         this.skipRatio = skipRatio;
         this.manager.writeSettings();
     }
+
+    public void setSFXPath(string path)
+    {
+        this.sfx_path = path;
+        this.manager.writeSettings();
+    }
 }

@@ -188,6 +188,19 @@ public class BotConfig
         }
         return path;
     }
+
+    private static Path getSFXPath()
+    {
+        Path path = OtherUtil.getPath(System.getProperty("sfx_path", null));
+        if(path.toFile().exists())
+        {
+            if(System.getProperty("sfx") == null)
+                System.setProperty("sfx_path", path.toAbsolutePath().toString());
+            ConfigFactory.invalidateCaches();
+        }
+        return path;
+    }
+    
     
     public static void writeDefaultConfig()
     {
