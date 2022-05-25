@@ -103,8 +103,7 @@ public class PlaySoundCmd extends MusicCommand
         {
             AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
             int pos = handler.addTrackToFront(new QueuedTrack(track, event.getAuthor()));
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess()+" Playing **"+track.getInfo().title
-                    +"** ";
+            String addMsg = FormatUtil.filter(event.getClient().getSuccess()+" Playing **"+track.getInfo().title +"** ");
             if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 m.editMessage(addMsg).queue();
             else
