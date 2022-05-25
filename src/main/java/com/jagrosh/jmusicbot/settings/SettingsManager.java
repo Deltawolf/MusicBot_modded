@@ -55,8 +55,8 @@ public class SettingsManager implements GuildSettingsManager
                         o.has("default_playlist")? o.getString("default_playlist")           : null,
                         o.has("repeat_mode")     ? o.getEnum(RepeatMode.class, "repeat_mode"): RepeatMode.OFF,
                         o.has("prefix")          ? o.getString("prefix")                     : null,
-                        o.has("skip_ratio")      ? o.getDouble("skip_ratio")                 : SKIP_RATIO)),
-                        o.has("sfx_path")        ? o.getString("sfx_path")                   : null,;
+                        o.has("skip_ratio")      ? o.getDouble("skip_ratio")                 : SKIP_RATIO,
+                        o.has("sfx_path")        ? o.getString("sfx_path")                   : null));
             });
         } catch(IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("Failed to load server settings (this is normal if no settings have been set yet): "+e);
