@@ -130,6 +130,11 @@ public class Settings implements GuildSettingsProvider
         return skipRatio;
     }
 
+    public String getSFXPath()
+    {
+        return sfx_path;
+    }
+
     @Override
     public Collection<String> getPrefixes()
     {
@@ -185,7 +190,7 @@ public class Settings implements GuildSettingsProvider
         this.manager.writeSettings();
     }
 
-    public void setSFXPath()
+    public void setSFXPath(String path)
     {
         this.sfx_path = path;
         this.manager.writeSettings();
