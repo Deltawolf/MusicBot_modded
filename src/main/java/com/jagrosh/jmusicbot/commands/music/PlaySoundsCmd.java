@@ -99,20 +99,7 @@ public class PlaySoundCmd extends MusicCommand
             this.ytsearch = ytsearch;
         }
 
-        private int loadPlaylist(AudioPlaylist playlist, AudioTrack exclude)
-        {
-            int[] count = {0};
-            playlist.getTracks().stream().forEach((track) -> {
-                if(!bot.getConfig().isTooLong(track) && !track.equals(exclude))
-                {
-                    AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-                    handler.addTrack(new QueuedTrack(track, event.getAuthor()));
-                    count[0]++;
-                }
-            });
-            return count[0];
-        }
-        
+
         private void loadSingle(AudioTrack track, AudioPlaylist playlist)
         {
             AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
@@ -138,6 +125,20 @@ public class PlaySoundCmd extends MusicCommand
                             try{ m.clearReactions().queue(); }catch(PermissionException ignore) {}
                         }).build().display(m);
             }
+        }
+
+        private int loadPlaylist(AudioPlaylist playlist, AudioTrack exclude)
+        {
+            int[] count = {0};
+            playlist.getTracks().stream().forEach((track) -> {
+                if(!bot.getConfig().isTooLong(track) && !track.equals(exclude))
+                {
+                    AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+                    handler.addTrack(new QueuedTrack(track, event.getAuthor()));
+                    count[0]++;
+                }
+            });
+            return count[0];
         }
     
         
