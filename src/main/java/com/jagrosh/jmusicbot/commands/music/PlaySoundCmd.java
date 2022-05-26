@@ -148,6 +148,43 @@ public class PlaySoundCmd extends MusicCommand
             loadSingle(track, null);
         }
 
+        @Override
+        public void playlistLoaded(AudioPlaylist playlist)
+        {
+            if(playlist.getTracks().size()==1 || playlist.isSearchResult())
+            {
+                AudioTrack single = playlist.getSelectedTrack()==null ? playlist.getTracks().get(0) : playlist.getSelectedTrack();
+                loadSingle(single, null);
+            }
+            else if (playlist.getSelectedTrack()!=null)
+            {
+                AudioTrack single = playlist.getSelectedTrack();
+                loadSingle(single, playlist);
+            }
+            else
+            {
+                int count = loadPlaylist(playlist, null);
+                if(playlist.getTracks().size() == 0)
+                {
+                    m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" The playlist "+(playlist.getName()==null ? "" : "(**"+playlist.getName()
+                            +"**) ")+" could not be loaded or contained 0 entries")).queue();
+                }
+                else if(count==0)
+                {
+                    m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" All entries in this playlist "+(playlist.getName()==null ? "" : "(**"+playlist.getName()
+                            +"**) ")+"were longer than the allowed maximum (`"+bot.getConfig().getMaxTime()+"`)")).queue();
+                }
+                else
+                {
+                    m.editMessage(FormatUtil.filter(event.getClient().getSuccess()+" Found "
+                            +(playlist.getName()==null?"a playlist":"playlist **"+playlist.getName()+"**")+" with `"
+                            + playlist.getTracks().size()+"` entries; added to the queue!"
+                            + (count<playlist.getTracks().size() ? "\n"+event.getClient().getWarning()+" Tracks longer than the allowed maximum (`"
+                            + bot.getConfig().getMaxTime()+"`) have been omitted." : ""))).queue();
+                }
+            }
+        }
+
 
         @Override
         public void noMatches()
