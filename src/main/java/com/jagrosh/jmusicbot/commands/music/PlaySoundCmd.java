@@ -76,8 +76,8 @@ public class PlaySoundCmd extends MusicCommand
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" Sound#1");
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" Sound#2");
 
-            for(Command cmd: children)
-                builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
+            //for(Command cmd: children)
+                //builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
             event.reply(builder.toString());
             return;
         }
