@@ -110,6 +110,7 @@ public class JMusicBot
                         new NowplayingCmd(bot),
                         new PlayCmd(bot),
                         new PlaySoundCmd(bot),
+                        new LocalSearchCmd(bot),
                         new PlaylistsCmd(bot),
                         new QueueCmd(bot),
                         new RemoveCmd(bot),
