@@ -30,6 +30,7 @@ public final class LocalSearchCmd extends SearchCmd {
 
         this.name = "localsearch";
         this.searchPrefix = "reclocal:";
+		this.searchingEmoji = bot.getConfig().getSearching();
         this.help = "searches local files for a provided query";
         this.aliases = bot.getConfig().getAliases(this.name);
 		   builder = new OrderedMenu.Builder()
