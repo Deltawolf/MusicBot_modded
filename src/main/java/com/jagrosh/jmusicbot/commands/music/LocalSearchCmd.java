@@ -30,7 +30,7 @@ public final class LocalSearchCmd extends SearchCmd {
         this.aliases = bot.getConfig().getAliases(this.name);
     }
 
-private class ResultHandler implements AudioLoadResultHandler 
+    private class ResultHandler implements AudioLoadResultHandler 
     {
         private final Message m;
         private final CommandEvent event;
@@ -39,6 +39,22 @@ private class ResultHandler implements AudioLoadResultHandler
         {
             this.m = m;
             this.event = event;
+        }
+        
+        @Override
+        public void trackLoaded(AudioTrack track)
+        {
+            if(bot.getConfig().isTooLong(track))
+            {
+                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" This track (**"+track.getInfo().title+"**) is longer than the allowed maximum: `"
+                        +FormatUtil.formatTime(track.getDuration())+"` > `"+bot.getConfig().getMaxTime()+"`")).queue();
+                return;
+            }
+            AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+            int pos = handler.addTrack(new QueuedTrack(track, event.getAuthor()))+1;
+            m.editMessage(FormatUtil.filter(event.getClient().getSuccess()+" Added **"+track.getInfo().title
+                    +"** (`"+FormatUtil.formatTime(track.getDuration())+"`) "+(pos==0 ? "to begin playing" 
+                        : " to the queue at position "+pos))).queue();
         }
 
         @Override
@@ -72,5 +88,20 @@ private class ResultHandler implements AudioLoadResultHandler
             }
             builder.build().display(m);
         }
-	}
+
+        @Override
+        public void noMatches() 
+        {
+            m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" No results found for `"+event.getArgs()+"`.")).queue();
+        }
+
+        @Override
+        public void loadFailed(FriendlyException throwable) 
+        {
+            if(throwable.severity==Severity.COMMON)
+                m.editMessage(event.getClient().getError()+" Error loading: "+throwable.getMessage()).queue();
+            else
+                m.editMessage(event.getClient().getError()+" Error loading track.").queue();
+        }
+    }
 }
