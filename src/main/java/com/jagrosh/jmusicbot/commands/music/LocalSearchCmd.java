@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.Message;
  */
 public final class LocalSearchCmd extends SearchCmd {
 
+	protected String searchPrefix = "reclocal:";
     private final OrderedMenu.Builder builder;
     private final String searchingEmoji;
 	
