@@ -21,7 +21,10 @@ import net.dv8tion.jda.api.entities.Message;
  */
 public final class LocalSearchCmd extends SearchCmd {
 
-    public LocalSearchCmd(Bot bot) {
+    private final OrderedMenu.Builder builder;
+    private final String searchingEmoji;
+	
+	public LocalSearchCmd(Bot bot) {
         super(bot);
 
         this.name = "localsearch";
