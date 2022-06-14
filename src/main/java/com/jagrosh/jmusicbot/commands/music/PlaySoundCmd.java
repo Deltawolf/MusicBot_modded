@@ -84,10 +84,8 @@ public class PlaySoundCmd extends MusicCommand
 		
         String args = event.getArgs();
         
-        event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "/home/pi/discord_bot/sfx/" + args, new ResultHandler(m,event,false)));
-        /* Check args vs possible sound files @ sfx path */
+        event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItem(event.getGuild(), args, new ResultHandler(m,event,false)));
 
-        /* Play sound file */
     }
     
     private class ResultHandler implements AudioLoadResultHandler
@@ -185,10 +183,9 @@ public class PlaySoundCmd extends MusicCommand
         @Override
         public void noMatches()
         {
-            if(ytsearch)
-                m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" No results found for `"+event.getArgs()+"`.")).queue();
-            else
-                bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:"+event.getArgs(), new ResultHandler(m,event,true));
+           
+            m.editMessage(FormatUtil.filter(event.getClient().getWarning()+" No results found for `"+ event.getArgs()+"`.")).queue();
+ 
         }
 
         @Override
