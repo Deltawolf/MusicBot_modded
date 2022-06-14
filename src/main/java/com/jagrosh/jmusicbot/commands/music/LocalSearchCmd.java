@@ -30,6 +30,20 @@ public final class LocalSearchCmd extends SearchCmd {
         this.aliases = bot.getConfig().getAliases(this.name);
     }
 
+    @Override
+    public void doCommand(CommandEvent event) 
+    {
+        if(event.getArgs().isEmpty())
+        {
+            event.replyError("Please include a query.");
+            return;
+        }
+        event.reply(searchingEmoji+" Searching... `["+event.getArgs()+"]`", 
+                m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), searchPrefix + event.getArgs(), new ResultHandler(m,event)));
+    }
+
+
+
     private class ResultHandler implements AudioLoadResultHandler 
     {
         private final Message m;
