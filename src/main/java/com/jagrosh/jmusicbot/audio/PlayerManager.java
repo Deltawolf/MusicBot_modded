@@ -86,7 +86,8 @@ public class PlayerManager extends DefaultAudioPlayerManager
     {
         private static final String SEARCH_PREFIX = "reclocal:";
 
-        public AudioItem loadItem(DefaultAudioPlayerManager manager, AudioReference reference)
+        @Override
+        public AudioItem loadItem(AudioPlayerManager manager, AudioReference reference) 
         {
             try {
                 List<AudioTrack> tracks = searchPathsCorrespondingQuery(reference.getIdentifier())
