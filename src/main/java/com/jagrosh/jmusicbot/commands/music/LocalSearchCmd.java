@@ -32,6 +32,12 @@ public final class LocalSearchCmd extends SearchCmd {
         this.searchPrefix = "reclocal:";
         this.help = "searches local files for a provided query";
         this.aliases = bot.getConfig().getAliases(this.name);
+		   builder = new OrderedMenu.Builder()
+                .allowTextInput(true)
+                .useNumbers()
+                .useCancelButton(true)
+                .setEventWaiter(bot.getWaiter())
+                .setTimeout(1, TimeUnit.MINUTES);
     }
 
     @Override
