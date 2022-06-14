@@ -25,7 +25,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioItem;
 import com.sedmelluq.discord.lavaplayer.track.AudioReference;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.BasicAudioPlaylist;
-import net.dv8tion.jda.core.entities.Guild;
+import com.typesafe.config.Config;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.IOException;
 import java.nio.file.Files;
