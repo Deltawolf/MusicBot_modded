@@ -52,7 +52,7 @@ public class PlaySoundCmd extends MusicCommand
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = false;
-        this.searchPrefix = "reclocal:";
+
     }
 
     @Override
@@ -85,7 +85,7 @@ public class PlaySoundCmd extends MusicCommand
 		
         String args = event.getArgs();
         
-        event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), searchPrefix + args, new ResultHandler(m,event,false)));
+        event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "reclocal:" + args, new ResultHandler(m,event,false)));
 
     }
     
