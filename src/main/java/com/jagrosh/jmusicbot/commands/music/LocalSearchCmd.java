@@ -16,4 +16,6 @@ public final class LocalSearchCmd extends SearchCmd {
         this.aliases = bot.getConfig().getAliases(this.name);
     }
 
+	
+
 }
