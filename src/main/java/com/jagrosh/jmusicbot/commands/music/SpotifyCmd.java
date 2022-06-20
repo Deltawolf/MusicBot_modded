@@ -55,6 +55,7 @@ public class SpotifyCmd extends MusicCommand
 	private final static URI redirect = URI.create("http://localhost:8888/callback/");
 	private final static String deviceName = "Zach-Stream";
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
+	.setAccessToken("Zjc3YjIxYzgzZjg4NDIyMmFhODZmNTI0YTM3Mzg5M2E6ZTA4YzZlZGNmZjhjNDUyNGEwMTBlNzc1YTk2YzJlNDA=")
 	.setClientId("f77b21c83f884222aa86f524a373893a")
 	.setClientSecret("e08c6edcff8c4524a010e775a96c2e40")
 	.setRedirectUri(redirect)
