@@ -111,6 +111,7 @@ public class JMusicBot
                         new PlayCmd(bot),
                         new PlaySoundCmd(bot),
                         new LocalSearchCmd(bot),
+                        new SpotifyCmd(bot),
                         new PlaylistsCmd(bot),
                         new QueueCmd(bot),
                         new RemoveCmd(bot),

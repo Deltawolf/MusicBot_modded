@@ -53,6 +53,11 @@
 	    <artifactId>lavaplayer</artifactId>
 	    <version>jmusicbot-SNAPSHOT</version>
 	</dependency>
+        <dependency>
+        <groupId>se.michaelthelin.spotify</groupId>
+        <artifactId>spotify-web-api-java</artifactId>
+        <version>7.1.0</version>
+    </dependency>
         <!-- this is needed, but isn't actually hosted anywhere anymore... uh -->
         <!--dependency>
             <groupId>com.sedmelluq</groupId>
