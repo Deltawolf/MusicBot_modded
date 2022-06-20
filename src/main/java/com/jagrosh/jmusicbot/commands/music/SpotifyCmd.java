@@ -138,10 +138,10 @@ public class SpotifyCmd extends MusicCommand
 		catch (IOException | SpotifyWebApiException | ParseException e) 
 		{
 			System.out.println("Error: " + e.getCause().getMessage());
-
-			return ["",""];
+			String[] var = {"",""};
+			return var;
 		} 
-
+	
 	}
 
 	private static Device[] getDevices() 
