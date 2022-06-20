@@ -38,6 +38,10 @@ import se.michaelthelin.spotify.requests.data.player.TransferUsersPlaybackReques
 import se.michaelthelin.spotify.model_objects.miscellaneous.CurrentlyPlaying;
 import se.michaelthelin.spotify.requests.data.player.GetUsersCurrentlyPlayingTrackRequest;
 import se.michaelthelin.spotify.model_objects.miscellaneous.Device;
+import com.sedmelluq.discord.lavaplayer.track.AudioReference;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import com.sedmelluq.discord.lavaplayer.track.info.AudioTrackInfoBuilder;
 
 /**
  *
@@ -50,7 +54,7 @@ public class SpotifyCmd extends MusicCommand
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 	private final static URI redirect = URI.create("http://localhost:8888/callback/");
 	private final static String deviceName = "Zach-Stream";
-	private static final 		SpotifyApi spotifyApi = new SpotifyApi.Builder()
+	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
 	.setClientId("f77b21c83f884222aa86f524a373893a")
 	.setClientSecret("e08c6edcff8c4524a010e775a96c2e40")
 	.setRedirectUri(redirect)
@@ -83,7 +87,8 @@ public class SpotifyCmd extends MusicCommand
     @Override
     public void doCommand(CommandEvent event) 
     {
-        if(event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty())
+		
+        if(event.getArgs().contains("help"))
         {
 
             StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Play Commands:\n");
@@ -97,17 +102,22 @@ public class SpotifyCmd extends MusicCommand
   
         event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://127.0.0.1/stream.mp3", new ResultHandler(m,event,false)));
 
-		String track = getNowPlaying();
+		spotifyApi.authorizationCodeRefresh();
+		String[] track = getNowPlaying();
 		if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
 		{
 			Device[] devices = getDevices();
 			transferDevice(devices);
 		}
 
+		AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
+        .setAuthor(track[0])
+		.setTitle(track[1])
+        .build();
 
 	}
 
-	private static String getNowPlaying() 
+	private static String[] getNowPlaying() 
 	{
 
 		try 
@@ -121,14 +131,15 @@ public class SpotifyCmd extends MusicCommand
 			String artist = track.getArtists().toString();
 			String song = track.getName().toString();
 
-			return artist + " - " + song;
+			String[] track_info = {artist, song};
+			return track_info;
 
 		} 
 		catch (IOException | SpotifyWebApiException | ParseException e) 
 		{
 			System.out.println("Error: " + e.getCause().getMessage());
 
-			return "";
+			return ["",""];
 		} 
 
 	}
