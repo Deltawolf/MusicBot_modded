@@ -124,7 +124,7 @@ public class SpotifyCmd extends MusicCommand
 		{
 			URI uri = authorizationCodeUriRequest.execute();
 			System.out.println("URI: " + uri.toString());
-			code = uri.toString();
+			code = "AQBqKEQ5_S6KKOCjAHTk9WfOuV-m1OwfdB3cSi-apx6rnuvJ0K8GYLFe7oNBxR8h6kk7e-5_111WlM6-7XtoUZJIoyVOUYzyQ--Wdt4U3gpWoQB3M-3lB6KO6wuxxnBVwsLHq6grTLHFAZHrJu1Kwlfb_LBZ9t4fkdyNBI7cDlKzcpg";
 			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
