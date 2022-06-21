@@ -68,7 +68,7 @@ jobs:
           prerelease: false
           artifacts: "*.jar"
           body: |
-            $info
+            ${{ env.info }}
             
             ---
             ### Setup
