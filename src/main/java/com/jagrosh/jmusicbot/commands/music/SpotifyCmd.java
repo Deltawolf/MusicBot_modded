@@ -159,19 +159,18 @@ public class SpotifyCmd extends MusicCommand
 			
 			GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
 			PagingCursorbased<PlayHistory> age=agb.execute();
-		   
-
-		   for (Integer i=0;i<5;i++) 
-		   {
-				System.out.println(String.format("The track number %s is: %s", age.getItems()[i].getTrack().getName().toString(), age.getItems()[i].getTrack().getArtists().toString()));
-		   }   
+			
+			for (Integer i=0;i<5;i++) 
+			{
+				System.out.println(String.format("The track %d %s is: %s", i+1,age.getItems()[i].getTrack().getName().toString(), age.getItems()[i].getTrack().getArtists()[0].getName().toString()));
+			}   
 	}
 
 	private static void refreshTokens() throws IOException, SpotifyWebApiException, ParseException
 	{
 		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-		//spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-		spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+		//spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 	}
 
 	private static void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
@@ -199,7 +198,7 @@ public class SpotifyCmd extends MusicCommand
 
 		String artist = track.getArtists().toString();
 		String song = track.getName().toString();
-
+		System.out.println(String.format("Now playing %s by %s", song, artist));
 		String[] track_info = {artist, song};
 		return track_info;
 	
