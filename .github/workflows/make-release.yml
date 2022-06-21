@@ -18,10 +18,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up JDK 8
+      - name: Set up JDK 12
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '12'
           distribution: 'adopt'
           cache: maven
       - name: Set Version
@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jar
-          path: JMusicBot-${{ github.event.inputs.version_number }}.jar
+          path: jmusicbot.jar
           if-no-files-found: error
   create_release:
     name: Create Release

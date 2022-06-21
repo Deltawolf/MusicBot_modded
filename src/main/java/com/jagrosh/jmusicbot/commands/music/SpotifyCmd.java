@@ -21,6 +21,9 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import org.apache.hc.core5.http.ParseException;
@@ -49,12 +52,21 @@ public class SpotifyCmd extends MusicCommand
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 	private final static URI redirect = URI.create("http://localhost:8888/callback/");
 	private final static String deviceName = "Zach-Stream";
+	private static final String code = "";
+
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
 	.setAccessToken("Zjc3YjIxYzgzZjg4NDIyMmFhODZmNTI0YTM3Mzg5M2E6ZTA4YzZlZGNmZjhjNDUyNGEwMTBlNzc1YTk2YzJlNDA=")
 	.setClientId("f77b21c83f884222aa86f524a373893a")
 	.setClientSecret("e08c6edcff8c4524a010e775a96c2e40")
 	.setRedirectUri(redirect)
 	.build();
+
+	private static final AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code)
+    .build();
+
+	private static final AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh()
+    .build();
+	
 	private static final GetUsersCurrentlyPlayingTrackRequest getUsersCurrentlyPlayingTrackRequest = spotifyApi
     .getUsersCurrentlyPlayingTrack()
 //          .market(CountryCode.SE)
@@ -98,7 +110,20 @@ public class SpotifyCmd extends MusicCommand
   
         event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://127.0.0.1/stream.mp3", new ResultHandler(m,event,false)));
 
-		spotifyApi.authorizationCodeRefresh();
+		try 
+		{
+			final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+			System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+		} 
+		catch (IOException | SpotifyWebApiException | ParseException e) 
+		{
+		  System.out.println("Error: " + e.getMessage());
+		}
+			spotifyApi.authorizationCodeRefresh();
+
+
 		String[] track = getNowPlaying();
 		if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
 		{
