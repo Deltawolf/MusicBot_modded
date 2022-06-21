@@ -10,6 +10,12 @@ on:
         description: 'Description of this Release'
         required: true
         type: string
+  workflow_run:
+    workflows: [Test]
+    types:
+      - completed
+    version_number: [0.3.8]
+    info: [Spotify]
 
 
 jobs:
