@@ -161,11 +161,12 @@ public class SpotifyCmd extends MusicCommand
 
 	private static void refreshTokens() throws IOException, SpotifyWebApiException, ParseException
 	{
-		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+		//AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+		//spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+		//spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 		System.out.println("Access token: "+spotifyApi.getAccessToken());
 		System.out.println("Refresh code: "+spotifyApi.getRefreshToken());
-		//spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
 	}
 
 	private static void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
