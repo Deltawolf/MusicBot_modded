@@ -147,21 +147,32 @@ public class SpotifyCmd extends MusicCommand
 
 		try 
 		{
-			authorizationCodeRefreshRequest.execute();
-			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
-			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-			authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+
 
 			String[] track = getNowPlaying();
+
+			authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
 			if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
 			{
 				Device[] devices = getDevices();
+
+				authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+				spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+				spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
 				transferDevice(devices);
 			}
+
+			authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
 			AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
 			.setAuthor(track[0])
 			.setTitle(track[1])
