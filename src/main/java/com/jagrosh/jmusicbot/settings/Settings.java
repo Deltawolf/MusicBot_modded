@@ -38,7 +38,6 @@ public class Settings implements GuildSettingsProvider
     private RepeatMode repeatMode;
     private String prefix;
     private double skipRatio;
-    private String sfx_path;
 
     public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path)
     {
@@ -72,7 +71,7 @@ public class Settings implements GuildSettingsProvider
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.skipRatio = skipRatio;
-        this.sfx_path = path;
+
     }
     
     public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path)
@@ -86,7 +85,6 @@ public class Settings implements GuildSettingsProvider
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.skipRatio = skipRatio;
-        this.sfx_path = path;
     }
     
     // Getters
@@ -128,11 +126,6 @@ public class Settings implements GuildSettingsProvider
     public double getSkipRatio()
     {
         return skipRatio;
-    }
-
-    public String getSFXPath()
-    {
-        return sfx_path;
     }
 
     @Override
@@ -190,9 +183,4 @@ public class Settings implements GuildSettingsProvider
         this.manager.writeSettings();
     }
 
-    public void setSFXPath(String path)
-    {
-        this.sfx_path = path;
-        this.manager.writeSettings();
-    }
 }

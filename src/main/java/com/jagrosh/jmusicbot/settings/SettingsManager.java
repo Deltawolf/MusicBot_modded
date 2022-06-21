@@ -107,8 +107,6 @@ public class SettingsManager implements GuildSettingsManager
                 o.put("prefix", s.getPrefix());
             if(s.getSkipRatio() != SKIP_RATIO)
                 o.put("skip_ratio", s.getSkipRatio());
-            if(s.getSFXPath() != null)
-                o.put("sfx_path", s.getSFXPath());
             obj.put(Long.toString(key), o);
         });
         try {
