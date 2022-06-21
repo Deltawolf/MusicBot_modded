@@ -102,7 +102,7 @@ public class SpotifyCmd extends MusicCommand
     @Override
     public void doCommand(CommandEvent event) 
     {
-		
+
         if(event.getArgs().contains("help"))
         {
 			URI uri = authorizationCodeUriRequest.execute();
@@ -168,19 +168,18 @@ public class SpotifyCmd extends MusicCommand
 		System.out.println("\nOld Access token: "+ spotifyApi.getAccessToken());
 		System.out.println("\nOld Refresh code: "+ spotifyApi.getRefreshToken());
 
-		//AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 		
-		//spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-		//spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+		spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
-		//System.out.println("\nNew Access token: "+ authorizationCodeCredentials.getAccessToken());
-		//System.out.println("\nNew Refresh code: "+ authorizationCodeCredentials.getRefreshToken());
+		System.out.println("\nNew Access token: "+ authorizationCodeCredentials.getAccessToken());
+		System.out.println("\nNew Refresh code: "+ authorizationCodeCredentials.getRefreshToken());
 
 	}
 
 	private static void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
 	{
-		refreshTokens();
 
 		GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
 		PagingCursorbased<PlayHistory> age=agb.execute();
