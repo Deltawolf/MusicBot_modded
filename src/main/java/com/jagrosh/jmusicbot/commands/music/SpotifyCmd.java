@@ -151,32 +151,37 @@ public class SpotifyCmd extends MusicCommand
 		System.out.println("URI: " + uri.toString());
 		AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 		spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+
 		System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
-		System.out.println("Access token: "+spotifyApi.getAccessToken());
-		System.out.println("Refresh code: "+spotifyApi.getRefreshToken());
+		System.out.println("\nAccess token: "+spotifyApi.getAccessToken());
+		System.out.println("\nRefresh code: "+spotifyApi.getRefreshToken());
 			
 	}
 
 	private static void refreshTokens() throws IOException, SpotifyWebApiException, ParseException
 	{
-		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 
-		System.out.println("Old Access token: "+ spotifyApi.getAccessToken());
-		System.out.println("Old Refresh code: "+ spotifyApi.getRefreshToken());
+
+		System.out.println("\nOld Access token: "+ spotifyApi.getAccessToken());
+		System.out.println("\nOld Refresh code: "+ spotifyApi.getRefreshToken());
+
+		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 		
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 		spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
-		System.out.println("New Access token: "+ authorizationCodeCredentials.getAccessToken());
-		System.out.println("New Refresh code: "+ authorizationCodeCredentials.getRefreshToken());
+		System.out.println("\nNew Access token: "+ authorizationCodeCredentials.getAccessToken());
+		System.out.println("\nNew Refresh code: "+ authorizationCodeCredentials.getRefreshToken());
 
 	}
 
 	private static void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
 	{
 		refreshTokens();
+
 		GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
 		PagingCursorbased<PlayHistory> age=agb.execute();
 		
