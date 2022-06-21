@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.internal.utils.config.AuthorizationConfig;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.SpotifyHttpManager;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -68,11 +67,9 @@ public class SpotifyCmd extends MusicCommand
 
 	private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
 	//          .state("x4xkmn9pu3j6ukrs8n")
-	//          .scope("user-read-birthdate,user-read-email")
+	          .scope("user-modify-playback-state,user-read-playback-state,user-read-currently-playing,user-read-recently-played,user-read-playback-position,user-top-read,streaming,user-library-read,playlist-read-collaborative,playlist-read-private,")
 	//          .show_dialog(true)
 		.build();
-	//private static final AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code)
-    //.build();
 
 	private static final AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh()
     .build();
@@ -108,21 +105,24 @@ public class SpotifyCmd extends MusicCommand
 		
         if(event.getArgs().contains("help"))
         {
-
-            StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Click the link to receive an authorization code.\nUse the code with the Spotify command to continue.\n");
+			URI uri = authorizationCodeUriRequest.execute();
+			System.out.println("URI: " + uri.toString());
+            StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Click the link to receive an authorization code.\nUse the code with the Spotify command to continue.\n" + uri.toString() + "\n");
             for(Command cmd: children)
                 builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
             event.reply(builder.toString());
             return;
         }
   
-        event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://127.0.0.1/stream.mp3", new ResultHandler(m,event,false)));
+        
 
 		code = event.getArgs();
+
 		try 
 		{
 			URI uri = authorizationCodeUriRequest.execute();
 			System.out.println("URI: " + uri.toString());
+			event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://127.0.0.1/stream.mp3", new ResultHandler(m,event,false)));
 			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
