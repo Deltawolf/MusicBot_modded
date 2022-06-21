@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
@@ -52,7 +53,7 @@ public class SpotifyCmd extends MusicCommand
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 	private final static URI redirect = URI.create("http://localhost:8888/callback/");
 	private final static String deviceName = "Zach-Stream";
-	private static final String code = "";
+	private static String code = "";
 
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
 	.setAccessToken("Zjc3YjIxYzgzZjg4NDIyMmFhODZmNTI0YTM3Mzg5M2E6ZTA4YzZlZGNmZjhjNDUyNGEwMTBlNzc1YTk2YzJlNDA=")
@@ -61,8 +62,13 @@ public class SpotifyCmd extends MusicCommand
 	.setRedirectUri(redirect)
 	.build();
 
-	private static final AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code)
-    .build();
+	private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
+	//          .state("x4xkmn9pu3j6ukrs8n")
+	//          .scope("user-read-birthdate,user-read-email")
+	//          .show_dialog(true)
+		.build();
+	//private static final AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code)
+    //.build();
 
 	private static final AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh()
     .build();
@@ -112,7 +118,12 @@ public class SpotifyCmd extends MusicCommand
 
 		try 
 		{
+			final URI uri = authorizationCodeUriRequest.execute();
+			System.out.println("URI: " + uri.toString());
+			code = uri.toString();
+			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 			final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+			System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 			System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
