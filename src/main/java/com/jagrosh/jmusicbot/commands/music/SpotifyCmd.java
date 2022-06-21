@@ -168,12 +168,13 @@ public class SpotifyCmd extends MusicCommand
 		System.out.println("\nOld Access token: "+ spotifyApi.getAccessToken());
 		System.out.println("\nOld Refresh code: "+ spotifyApi.getRefreshToken());
 
-		final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+		spotifyApi.setRefreshToken(spotifyApi.getRefreshToken());
+		  
+		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh()
+				  .build();
+		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 
-		// Set access and refresh token for further "spotifyApi" object usage
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-  
-		System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
 
 		System.out.println("\nNew Access token: "+ authorizationCodeCredentials.getAccessToken());
 		System.out.println("\nNew Refresh code: "+ authorizationCodeCredentials.getRefreshToken());
