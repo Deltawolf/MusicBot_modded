@@ -27,6 +27,9 @@ import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCrede
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
+import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
+import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import org.apache.hc.core5.http.ParseException;
 
 import java.io.IOException;
@@ -118,34 +121,61 @@ public class SpotifyCmd extends MusicCommand
 
 		try 
 		{
-			final URI uri = authorizationCodeUriRequest.execute();
+			URI uri = authorizationCodeUriRequest.execute();
 			System.out.println("URI: " + uri.toString());
 			code = uri.toString();
 			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
-			final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
-			System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 			System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+			System.out.println("Access token: "+spotifyApi.getAccessToken());
+			System.out.println("Refresh code: "+spotifyApi.getRefreshToken());
+			
+			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+			authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+  
+		   GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
+		   PagingCursorbased<PlayHistory> age=agb.execute();
+		   
+		   for (Integer i=0;i<5;i++) 
+		   {
+			   System.out.println(String.format("The track number %s is: %s", i.toString() ,age.getItems()[i].toString()));
+		   }   
+
 		} 
 		catch (IOException | SpotifyWebApiException | ParseException e) 
 		{
 		  System.out.println("Error: " + e.getMessage());
 		}
-			spotifyApi.authorizationCodeRefresh();
 
-
-		String[] track = getNowPlaying();
-		if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
+		try 
 		{
-			Device[] devices = getDevices();
-			transferDevice(devices);
-		}
 
-		AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
-        .setAuthor(track[0])
-		.setTitle(track[1])
-        .build();
+			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
+			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+			authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+
+			String[] track = getNowPlaying();
+			if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
+			{
+				Device[] devices = getDevices();
+				transferDevice(devices);
+			}
+			AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
+			.setAuthor(track[0])
+			.setTitle(track[1])
+			.build();
+		} 
+		catch (IOException | SpotifyWebApiException | ParseException e) 
+		{
+		System.out.println("Error: " + e.getMessage());
+		}
 
 	}
 

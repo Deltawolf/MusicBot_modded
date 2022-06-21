@@ -1,20 +1,15 @@
 name: Make Release
 on:
-  push:
-    branches:
-    - master
-
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       version_number:
-#         description: 'Version Number'     
-#         required: true
-#         type: string
-#       info:
-#         description: 'Description of this Release'
-#         required: true
-#         type: string
+  workflow_dispatch:
+    inputs:
+      version_number:
+        description: 'Version Number'     
+        required: true
+        type: string
+      info:
+        description: 'Description of this Release'
+        required: true
+        type: string
 
 
 jobs:
