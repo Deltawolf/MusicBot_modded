@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-
+import net.dv8tion.jda.internal.utils.config.AuthorizationConfig;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.SpotifyHttpManager;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -109,9 +109,7 @@ public class SpotifyCmd extends MusicCommand
         if(event.getArgs().contains("help"))
         {
 
-            StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Play Commands:\n");
-            builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <song title>` - plays the first result from Youtube");
-            builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <URL>` - plays the provided song, playlist, or stream");
+            StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Click the link to receive an authorization code.\nUse the code with the Spotify command to continue.\n");
             for(Command cmd: children)
                 builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
             event.reply(builder.toString());
@@ -120,11 +118,11 @@ public class SpotifyCmd extends MusicCommand
   
         event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://127.0.0.1/stream.mp3", new ResultHandler(m,event,false)));
 
+		code = event.getArgs();
 		try 
 		{
 			URI uri = authorizationCodeUriRequest.execute();
 			System.out.println("URI: " + uri.toString());
-			code = "AQBqKEQ5_S6KKOCjAHTk9WfOuV-m1OwfdB3cSi-apx6rnuvJ0K8GYLFe7oNBxR8h6kk7e-5_111WlM6-7XtoUZJIoyVOUYzyQ--Wdt4U3gpWoQB3M-3lB6KO6wuxxnBVwsLHq6grTLHFAZHrJu1Kwlfb_LBZ9t4fkdyNBI7cDlKzcpg";
 			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
@@ -133,12 +131,8 @@ public class SpotifyCmd extends MusicCommand
 			System.out.println("Access token: "+spotifyApi.getAccessToken());
 			System.out.println("Refresh code: "+spotifyApi.getRefreshToken());
 			
-			spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-			authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-  
-		   GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
-		   PagingCursorbased<PlayHistory> age=agb.execute();
+			GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
+			PagingCursorbased<PlayHistory> age=agb.execute();
 		   
 		   for (Integer i=0;i<5;i++) 
 		   {
@@ -153,7 +147,7 @@ public class SpotifyCmd extends MusicCommand
 
 		try 
 		{
-			
+			authorizationCodeRefreshRequest.execute();
 			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
