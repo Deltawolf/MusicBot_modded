@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.SpotifyHttpManager;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
@@ -54,7 +55,7 @@ public class SpotifyCmd extends MusicCommand
 {
     private final static String LOAD = "\uD83D\uDCE5"; // 📥
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
-	private final static URI redirect = URI.create("http://localhost:8888/callback/");
+	private final static URI redirect = SpotifyHttpManager.makeUri("http://localhost:8888/callback/");
 	private final static String deviceName = "Zach-Stream";
 	private static String code = "";
 
@@ -152,7 +153,7 @@ public class SpotifyCmd extends MusicCommand
 
 		try 
 		{
-
+			
 			AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
 			AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
 			spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
