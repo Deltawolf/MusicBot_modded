@@ -14,9 +14,9 @@ on:
     workflows: [Test]
     types:
       - completed
-    version_number: [0.3.8]
-    info: [Spotify]
-
+env:
+    version_number: 0.3.8
+    info: Spotify
 
 jobs:
   build_jar:
