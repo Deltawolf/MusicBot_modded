@@ -32,11 +32,18 @@ import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
 import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
 import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import org.apache.hc.core5.http.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
+
+import com.fasterxml.jackson.databind.ser.std.JsonValueSerializer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import se.michaelthelin.spotify.requests.data.player.GetUsersAvailableDevicesRequest;
 import se.michaelthelin.spotify.requests.data.player.TransferUsersPlaybackRequest;
@@ -92,20 +99,47 @@ public class SpotifyCmd extends MusicCommand
     public void doCommand(CommandEvent event) 
     {
 
-        if(event.getArgs().contains("help"))
+        if(event.getArgs().startsWith("help"))
         {
 			URI uri = authorizationCodeUriRequest.execute();
-			System.out.println("URI: " + uri.toString());
+			System.out.println("URI: " + uri.toString() + "\n\n");
             StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Click the link to receive an authorization code.\nUse the code with the Spotify command to continue.\n" + uri.toString() + "\n");
             for(Command cmd: children)
                 builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
             event.reply(builder.toString());
             return;
         }
+		else if(event.getArgs().startsWith("code"))
+		{
+
+			URI uri = authorizationCodeUriRequest.execute();
+			System.out.println("URI: " + uri.toString());
+
+			event.reply("Use this link to retrieve a new authorization code\n" + uri.toString() + "\n");
+
+			System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+			System.out.println("\nAccess token: "+spotifyApi.getAccessToken());
+			System.out.println("\nRefresh code: "+spotifyApi.getRefreshToken() + "\n");
+			System.out.println(authorizationCodeCredentials.toString()+ "\n");
+		}
+		else if(event.getArgs().startsWith("authorize "))
+		{
+			
+			try
+			{
+				code = event.getArgs().substring(10, event.getArgs().length()-1); 
+				AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
+				AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+				spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
+				spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+			}
+			catch (IOException | SpotifyWebApiException | ParseException e) 
+			{
+				System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
+			}
+		}
 
 		code = event.getArgs();
-  
-		event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://127.0.0.1/stream.mp3", new ResultHandler(m,event,false)));
         
 		try
 		{
@@ -131,20 +165,13 @@ public class SpotifyCmd extends MusicCommand
 			System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
 		}
 
+		event.reply(loadingEmoji+" Loading... `[ " + deviceName + " ]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "http://192.168.1.50/stream.mp3", new ResultHandler(m,event,false)));
 
 	}
 
-	/*
-	
-	https://accounts.spotify.com:443/authorize?client_id=f77b21c83f884222aa86f524a373893a&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8888%2Fcallback%2F&scope=user-modify-playback-state%2Cuser-read-playback-state%2Cuser-read-currently-playing%2Cuser-read-recently-played%2Cuser-read-playback-position%2Cuser-top-read%2Cstreaming%2Cuser-library-read%2Cplaylist-read-collaborative%2Cplaylist-read-private%2C
-	AQDoWowuExGPMB68nJ7_GriJCyacb1D5XKHo58a7NH0qQOf34xI3RHCBtAxx2vfiIT0vbyd21HJQrgm24VKUUcGGjpjw7HQVn-3zIzSfJnb4YnBkV7fkPKuxQdn2XiXltiI
-	*/
 	private static void spotify_authentication(String code) throws IOException, SpotifyWebApiException, ParseException
 	{
 	
-		URI uri = authorizationCodeUriRequest.execute();
-		System.out.println("URI: " + uri.toString());
-		
 		spotifyApi.setRefreshToken(	"AQDoWowuExGPMB68nJ7_GriJCyacb1D5XKHo58a7NH0qQOf34xI3RHCBtAxx2vfiIT0vbyd21HJQrgm24VKUUcGGjpjw7HQVn-3zIzSfJnb4YnBkV7fkPKuxQdn2XiXltiI");
 	
 		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
@@ -205,8 +232,14 @@ public class SpotifyCmd extends MusicCommand
 
 		String artist = track.getArtists()[0].getName().toString();
 		String song = track.getName().toString();
-		System.out.println(String.format("Now playing %s by %s", song, artist));
-		String[] track_info = {artist, song};
+		String[] track_info = {"", ""};
+		if(artist != null && song != null)
+		{
+			System.out.println(String.format("Now playing %s by %s", song, artist));
+			track_info[0] = artist;
+			track_info[1] = song;
+		}
+
 		return track_info;
 
 	}
@@ -240,7 +273,12 @@ public class SpotifyCmd extends MusicCommand
 		if(currentDevice == null)
 			return;
 
-		JsonArray deviceIds = JsonParser.parseString(currentDevice.getId()).getAsJsonArray();
+		
+		String[] deviceID = {JsonParser.parseString(currentDevice.getId()).getAsString()};
+		Gson gson = new Gson();
+
+		JsonArray deviceIds = JsonParser.parseString(gson.toJson(deviceID)).getAsJsonArray();
+
 		TransferUsersPlaybackRequest transferUsersPlaybackRequest = spotifyApi
 		.transferUsersPlayback(deviceIds)
 	//          .play(false)
