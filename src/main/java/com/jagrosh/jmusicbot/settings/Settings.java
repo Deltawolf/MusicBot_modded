@@ -183,4 +183,5 @@ public class Settings implements GuildSettingsProvider
         this.manager.writeSettings();
     }
 
+
 }

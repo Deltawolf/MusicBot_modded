@@ -44,6 +44,8 @@ public class Bot
     private final PlaylistLoader playlists;
     private final NowplayingHandler nowplaying;
     private final AloneInVoiceHandler aloneInVoiceHandler;
+    private final String refreshToken;
+    private final String clientSecret;
     
     private boolean shuttingDown = false;
     private JDA jda;
@@ -62,6 +64,9 @@ public class Bot
         this.nowplaying.init();
         this.aloneInVoiceHandler = new AloneInVoiceHandler(this);
         this.aloneInVoiceHandler.init();
+        this.refreshToken = config.getRefreshToken();
+        this.clientSecret = config.getClientSecret();
+
     }
     
     public BotConfig getConfig()
@@ -102,6 +107,16 @@ public class Bot
     public AloneInVoiceHandler getAloneInVoiceHandler()
     {
         return aloneInVoiceHandler;
+    }
+
+    public String getRefreshToken()
+    {
+        return refreshToken;
+    }
+
+    public String getClientSecret()
+    {
+        return clientSecret;
     }
     
     public JDA getJDA()

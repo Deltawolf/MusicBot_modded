@@ -40,7 +40,7 @@ public class BotConfig
     
     private Path path = null;
     private String token, prefix, altprefix, helpWord, playlistsFolder,
-            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji;
+            successEmoji, warningEmoji, errorEmoji, loadingEmoji, searchingEmoji, refreshToken, clientSecret;
     private boolean stayInChannel, songInGame, npImages, updatealerts, useEval, dbots;
     private long owner, maxSeconds, aloneTimeUntilStop;
     private OnlineStatus status;
@@ -89,8 +89,11 @@ public class BotConfig
             maxSeconds = config.getLong("maxtime");
             aloneTimeUntilStop = config.getLong("alonetimeuntilstop");
             playlistsFolder = config.getString("playlistsfolder");
+            clientSecret = config.getString("clientSecret");
+            refreshToken = config.getString("refreshToken");
             aliases = config.getConfig("aliases");
             transforms = config.getConfig("transforms");
+ 
             dbots = owner == 113156185389092864L;
             
             // we may need to write a new config file
@@ -290,7 +293,17 @@ public class BotConfig
     {
         return playlistsFolder;
     }
+
+    public String getRefreshToken()
+    {
+        return refreshToken;
+    }
     
+    public String getClientSecret()
+    {
+        return clientSecret;
+    }
+
     public boolean getDBots()
     {
         return dbots;

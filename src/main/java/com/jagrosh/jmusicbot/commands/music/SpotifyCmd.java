@@ -26,24 +26,18 @@ import se.michaelthelin.spotify.requests.authorization.authorization_code.Author
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
 import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
 import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import org.apache.hc.core5.http.ParseException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
 
-import com.fasterxml.jackson.databind.ser.std.JsonValueSerializer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializer;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import se.michaelthelin.spotify.requests.data.player.GetUsersAvailableDevicesRequest;
 import se.michaelthelin.spotify.requests.data.player.TransferUsersPlaybackRequest;
@@ -66,19 +60,9 @@ public class SpotifyCmd extends MusicCommand
 	private final static String deviceName = "Zach-Stream";
 	private static AuthorizationCodeCredentials authorizationCodeCredentials;
 	private static String code = "";
-
-	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-	.setAccessToken("Zjc3YjIxYzgzZjg4NDIyMmFhODZmNTI0YTM3Mzg5M2E6ZTA4YzZlZGNmZjhjNDUyNGEwMTBlNzc1YTk2YzJlNDA=")
-	.setClientId("f77b21c83f884222aa86f524a373893a")
-	.setClientSecret("e08c6edcff8c4524a010e775a96c2e40")
-	.setRedirectUri(redirect)
-	.build();
-
-	private static final AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
-	//          .state("x4xkmn9pu3j6ukrs8n")
-	          .scope("user-modify-playback-state,user-read-playback-state,user-read-currently-playing,user-read-recently-played,user-read-playback-position,user-top-read,streaming,user-library-read,playlist-read-collaborative,playlist-read-private,")
-	//          .show_dialog(true)
-		.build();
+	private String refreshToken = "";
+	private String clientSecret = "";
+	private SpotifyApi spotifyApi;
 
     
     private final String loadingEmoji;
@@ -93,17 +77,26 @@ public class SpotifyCmd extends MusicCommand
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = false;
+		this.refreshToken = bot.getRefreshToken();
+		this.clientSecret = bot.getClientSecret();
     }
 
     @Override
     public void doCommand(CommandEvent event) 
     {
 
+		spotifyApi = new SpotifyApi.Builder()
+		.setAccessToken("Zjc3YjIxYzgzZjg4NDIyMmFhODZmNTI0YTM3Mzg5M2E6ZTA4YzZlZGNmZjhjNDUyNGEwMTBlNzc1YTk2YzJlNDA=")
+		.setClientId("f77b21c83f884222aa86f524a373893a")
+		//.setClientSecret("e08c6edcff8c4524a010e775a96c2e40");
+		.setClientSecret(clientSecret)
+		.setRedirectUri(redirect)
+		.build();
+
         if(event.getArgs().startsWith("help"))
         {
-			URI uri = authorizationCodeUriRequest.execute();
-			System.out.println("URI: " + uri.toString() + "\n\n");
-            StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Click the link to receive an authorization code.\nUse the code with the Spotify command to continue.\n" + uri.toString() + "\n");
+
+            StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Click the link to receive an authorization code.\nUse the code with the Spotify command to continue.\n");
             for(Command cmd: children)
                 builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" ").append(cmd.getName()).append(" ").append(cmd.getArguments()).append("` - ").append(cmd.getHelp());
             event.reply(builder.toString());
@@ -112,6 +105,11 @@ public class SpotifyCmd extends MusicCommand
 		else if(event.getArgs().startsWith("code"))
 		{
 
+			AuthorizationCodeUriRequest authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
+			//          .state("x4xkmn9pu3j6ukrs8n")
+					  .scope("user-modify-playback-state,user-read-playback-state,user-read-currently-playing,user-read-recently-played,user-read-playback-position,user-top-read,streaming,user-library-read,playlist-read-collaborative,playlist-read-private,")
+			//          .show_dialog(true)
+				.build();
 			URI uri = authorizationCodeUriRequest.execute();
 			System.out.println("URI: " + uri.toString());
 
@@ -169,41 +167,32 @@ public class SpotifyCmd extends MusicCommand
 
 	}
 
-	private static void spotify_authentication(String code) throws IOException, SpotifyWebApiException, ParseException
+	private void spotify_authentication(String code) throws IOException, SpotifyWebApiException, ParseException
 	{
 	
-		spotifyApi.setRefreshToken(	"AQDoWowuExGPMB68nJ7_GriJCyacb1D5XKHo58a7NH0qQOf34xI3RHCBtAxx2vfiIT0vbyd21HJQrgm24VKUUcGGjpjw7HQVn-3zIzSfJnb4YnBkV7fkPKuxQdn2XiXltiI");
+		spotifyApi.setRefreshToken( refreshToken);
 	
 		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
 		authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 
 
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-
-		// System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
-		// System.out.println("\nAccess token: "+spotifyApi.getAccessToken());
-		// System.out.println("\nRefresh code: "+spotifyApi.getRefreshToken() + "\n");
-		// System.out.println(authorizationCodeCredentials.toString()+ "\n");
 			
 	}
 
-	private static void refreshTokens() throws IOException, SpotifyWebApiException, ParseException
+	private void refreshTokens() throws IOException, SpotifyWebApiException, ParseException
 	{
-		// System.out.println("\nOld Access token: "+ spotifyApi.getAccessToken());
-		// System.out.println("\nOld Refresh token: "+ spotifyApi.getRefreshToken());
 
 		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
 		authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 
-		System.out.println("\nNew Access token \n"); //+ authorizationCodeCredentials.getAccessToken() + "\n");
-
-		// System.out.println(authorizationCodeCredentials.toString()+ "\n");
+		System.out.println("\nNew Access token \n");
 
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
 
 	}
 
-	private static void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
+	private void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
 	{
 
 		GetCurrentUsersRecentlyPlayedTracksRequest agb = spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
@@ -215,7 +204,7 @@ public class SpotifyCmd extends MusicCommand
 		}   
 	}
 
-	private static String[] getNowPlaying() throws IOException, SpotifyWebApiException, ParseException
+	private String[] getNowPlaying() throws IOException, SpotifyWebApiException, ParseException
 	{
 		refreshTokens();
 
@@ -244,7 +233,7 @@ public class SpotifyCmd extends MusicCommand
 
 	}
 
-	private static Device[] getDevices() throws IOException, SpotifyWebApiException, ParseException
+	private Device[] getDevices() throws IOException, SpotifyWebApiException, ParseException
 	{
 		refreshTokens();
 
@@ -258,7 +247,7 @@ public class SpotifyCmd extends MusicCommand
 		return devices;
 	}
 
-	private static void transferDevice(Device[] devices) throws IOException, SpotifyWebApiException, ParseException
+	private void transferDevice(Device[] devices) throws IOException, SpotifyWebApiException, ParseException
 	{
 		refreshTokens();
 		Device currentDevice = null;
