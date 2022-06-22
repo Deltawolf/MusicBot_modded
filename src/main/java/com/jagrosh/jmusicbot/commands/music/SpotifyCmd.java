@@ -26,6 +26,7 @@ import se.michaelthelin.spotify.requests.authorization.authorization_code.Author
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.model_objects.specification.PagingCursorbased;
 import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
@@ -56,6 +57,7 @@ public class SpotifyCmd extends MusicCommand
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
 	private final static URI redirect = SpotifyHttpManager.makeUri("http://localhost:8888/callback/");
 	private final static String deviceName = "Zach-Stream";
+	private static AuthorizationCodeCredentials authorizationCodeCredentials;
 	private static String code = "";
 
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
@@ -70,19 +72,6 @@ public class SpotifyCmd extends MusicCommand
 	          .scope("user-modify-playback-state,user-read-playback-state,user-read-currently-playing,user-read-recently-played,user-read-playback-position,user-top-read,streaming,user-library-read,playlist-read-collaborative,playlist-read-private,")
 	//          .show_dialog(true)
 		.build();
-
-	private static final AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh()
-	.build();
-	
-	private static final GetUsersCurrentlyPlayingTrackRequest getUsersCurrentlyPlayingTrackRequest = spotifyApi
-    .getUsersCurrentlyPlayingTrack()
-//          .market(CountryCode.SE)
-//          .additionalTypes("track,episode")
-    .build();
-
-	private static final GetUsersAvailableDevicesRequest getUsersAvailableDevicesRequest = spotifyApi
-    .getUsersAvailableDevices()
-    .build();
 
     
     private final String loadingEmoji;
@@ -139,82 +128,100 @@ public class SpotifyCmd extends MusicCommand
 		}
 		catch (IOException | SpotifyWebApiException | ParseException e) 
 		{
-		  System.out.println("Error: " + e.getMessage());
+			System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
 		}
+
 
 	}
 
+	/*
+	
+	https://accounts.spotify.com:443/authorize?client_id=f77b21c83f884222aa86f524a373893a&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8888%2Fcallback%2F&scope=user-modify-playback-state%2Cuser-read-playback-state%2Cuser-read-currently-playing%2Cuser-read-recently-played%2Cuser-read-playback-position%2Cuser-top-read%2Cstreaming%2Cuser-library-read%2Cplaylist-read-collaborative%2Cplaylist-read-private%2C
+	AQDoWowuExGPMB68nJ7_GriJCyacb1D5XKHo58a7NH0qQOf34xI3RHCBtAxx2vfiIT0vbyd21HJQrgm24VKUUcGGjpjw7HQVn-3zIzSfJnb4YnBkV7fkPKuxQdn2XiXltiI
+	*/
 	private static void spotify_authentication(String code) throws IOException, SpotifyWebApiException, ParseException
 	{
 	
 		URI uri = authorizationCodeUriRequest.execute();
 		System.out.println("URI: " + uri.toString());
-		AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(code).build();
-		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+		
+		spotifyApi.setRefreshToken(	"AQDoWowuExGPMB68nJ7_GriJCyacb1D5XKHo58a7NH0qQOf34xI3RHCBtAxx2vfiIT0vbyd21HJQrgm24VKUUcGGjpjw7HQVn-3zIzSfJnb4YnBkV7fkPKuxQdn2XiXltiI");
+	
+		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
+		authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+
 
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-		spotifyApi.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
 
-		System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
-		System.out.println("\nAccess token: "+spotifyApi.getAccessToken());
-		System.out.println("\nRefresh code: "+spotifyApi.getRefreshToken());
+		// System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+		// System.out.println("\nAccess token: "+spotifyApi.getAccessToken());
+		// System.out.println("\nRefresh code: "+spotifyApi.getRefreshToken() + "\n");
+		// System.out.println(authorizationCodeCredentials.toString()+ "\n");
 			
 	}
 
 	private static void refreshTokens() throws IOException, SpotifyWebApiException, ParseException
 	{
+		// System.out.println("\nOld Access token: "+ spotifyApi.getAccessToken());
+		// System.out.println("\nOld Refresh token: "+ spotifyApi.getRefreshToken());
 
+		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh().build();
+		authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
 
-		System.out.println("\nOld Access token: "+ spotifyApi.getAccessToken());
-		System.out.println("\nOld Refresh code: "+ spotifyApi.getRefreshToken());
+		System.out.println("\nNew Access token \n"); //+ authorizationCodeCredentials.getAccessToken() + "\n");
 
-		spotifyApi.setRefreshToken(spotifyApi.getRefreshToken());
-		  
-		AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApi.authorizationCodeRefresh()
-				  .build();
-		AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+		// System.out.println(authorizationCodeCredentials.toString()+ "\n");
 
 		spotifyApi.setAccessToken(authorizationCodeCredentials.getAccessToken());
-
-		System.out.println("\nNew Access token: "+ authorizationCodeCredentials.getAccessToken());
-		System.out.println("\nNew Refresh code: "+ authorizationCodeCredentials.getRefreshToken());
 
 	}
 
 	private static void getRecentlyPlayed() throws IOException, SpotifyWebApiException, ParseException
 	{
 
-		GetCurrentUsersRecentlyPlayedTracksRequest agb=spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
-		PagingCursorbased<PlayHistory> age=agb.execute();
+		GetCurrentUsersRecentlyPlayedTracksRequest agb = spotifyApi.getCurrentUsersRecentlyPlayedTracks().build();
+		PagingCursorbased<PlayHistory> age = agb.execute();
 		
 		for (Integer i=0;i<5;i++) 
 		{
-			System.out.println(String.format("The track %d: %s by %s", i+1,age.getItems()[i].getTrack().getName().toString(), age.getItems()[i].getTrack().getArtists()[0].getName().toString()));
+			System.out.println(String.format("Track %d: %s by %s", i+1,age.getItems()[i].getTrack().getName().toString(), age.getItems()[i].getTrack().getArtists()[0].getName().toString()));
 		}   
 	}
 
 	private static String[] getNowPlaying() throws IOException, SpotifyWebApiException, ParseException
 	{
 		refreshTokens();
-		final CurrentlyPlaying currentlyPlaying = getUsersCurrentlyPlayingTrackRequest.execute();
 
+		GetUsersCurrentlyPlayingTrackRequest getUsersCurrentlyPlayingTrackRequest = spotifyApi
+		.getUsersCurrentlyPlayingTrack()
+	//          .market(CountryCode.SE)
+	//          .additionalTypes("track,episode")
+		.build();
+
+		CurrentlyPlaying currentlyPlaying = getUsersCurrentlyPlayingTrackRequest.execute();
 		System.out.println("Timestamp: " + currentlyPlaying.getTimestamp());
 		String track_id = currentlyPlaying.getItem().getId();
 		Track track = spotifyApi.getTrack(track_id).build().execute();
 
-		String artist = track.getArtists().toString();
+		String artist = track.getArtists()[0].getName().toString();
 		String song = track.getName().toString();
 		System.out.println(String.format("Now playing %s by %s", song, artist));
 		String[] track_info = {artist, song};
 		return track_info;
-	
+
 	}
 
 	private static Device[] getDevices() throws IOException, SpotifyWebApiException, ParseException
 	{
 		refreshTokens();
-		final Device[] devices = getUsersAvailableDevicesRequest.execute();
-		System.out.println("Length: " + devices.length);
+
+		GetUsersAvailableDevicesRequest getUsersAvailableDevicesRequest = spotifyApi
+		.getUsersAvailableDevices()
+		.build();
+
+		Device[] devices = getUsersAvailableDevicesRequest.execute();
+		
+
 		return devices;
 	}
 
@@ -225,6 +232,7 @@ public class SpotifyCmd extends MusicCommand
 
 		for(Device device : devices)
 		{
+			System.out.println("Device detected: \nName: " + device.getName() + "\tID: " + device.getId() + "\n");
 			if(device.getName().equals(deviceName))
 				currentDevice = device;
 		}
@@ -233,7 +241,7 @@ public class SpotifyCmd extends MusicCommand
 			return;
 
 		JsonArray deviceIds = JsonParser.parseString(currentDevice.getId()).getAsJsonArray();
-		final TransferUsersPlaybackRequest transferUsersPlaybackRequest = spotifyApi
+		TransferUsersPlaybackRequest transferUsersPlaybackRequest = spotifyApi
 		.transferUsersPlayback(deviceIds)
 	//          .play(false)
 		.build();
