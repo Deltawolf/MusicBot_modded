@@ -49,6 +49,9 @@ import se.michaelthelin.spotify.model_objects.miscellaneous.Device;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import com.sedmelluq.discord.lavaplayer.track.info.AudioTrackInfoBuilder;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -81,6 +84,32 @@ public class SpotifyCmd extends MusicCommand
         this.bePlaying = false;
 		this.refreshToken = bot.getRefreshToken();
 		this.clientSecret = bot.getClientSecret();
+
+		try 
+        {
+            Signal.handle(new Signal("USR1"), new SignalHandler() 
+            {
+                public void handle(Signal sig) 
+                {
+					try
+					{
+						updateTrack();
+					}
+					catch (IOException | SpotifyWebApiException | ParseException e) 
+					{
+						System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
+					}
+
+                }
+            });
+        }
+
+        catch(IllegalArgumentException ex)
+        {
+            System.out.println( "Some aspect of the configuration is "
+            + "invalid. Illegal argument exception with signaling was thrown.");
+            System.exit(1);
+        }
     }
 
     @Override
@@ -273,6 +302,26 @@ public class SpotifyCmd extends MusicCommand
 	
 	}
 
+	private String[] updateTrack() throws IOException, SpotifyWebApiException, ParseException
+	{
+		String[] spotify_track = getNowPlaying();
+				
+		AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
+		.setAuthor(spotify_track[0])
+		.setTitle(spotify_track[1])
+		.build();
+
+		if(bot.getConfig().getSongInStatus())
+		{
+			if(bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()<=1)
+				bot.getJDA().getPresence().setActivity(Activity.listening(trackInfo.title + " by " + trackInfo.author));
+			else
+				bot.resetGame();
+		}
+
+		return spotify_track;
+	}
+
     
     private class ResultHandler implements AudioLoadResultHandler
     {
@@ -292,20 +341,8 @@ public class SpotifyCmd extends MusicCommand
 
 			try
 			{
-				String[] spotify_track = getNowPlaying();
-				
-				AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
-				.setAuthor(spotify_track[0])
-				.setTitle(spotify_track[1])
-				.build();
 
-				if(bot.getConfig().getSongInStatus())
-				{
-					if(track!=null && bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()<=1)
-						bot.getJDA().getPresence().setActivity(Activity.listening(trackInfo.title + " by " + trackInfo.author));
-					else
-						bot.resetGame();
-				}
+				String[] spotify_track = updateTrack();
 
 				String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " Loaded stream!\nNow playing " + spotify_track[1] + " by " + spotify_track[0] + " \n");
 
