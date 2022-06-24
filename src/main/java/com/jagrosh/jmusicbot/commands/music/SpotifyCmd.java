@@ -295,6 +295,9 @@ public class SpotifyCmd extends MusicCommand
         {
 
             String addMsg = FormatUtil.filter(event.getClient().getSuccess()+ " Loaded stream!");
+			AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+			//Audiotrack track = new AudioTrackInfo(title, author, length, identifier, isStream, uri);
+            handler.addTrack(new QueuedTrack(track, event.getAuthor()));
             if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
                 m.editMessage(addMsg).queue();
             else
@@ -334,7 +337,7 @@ public class SpotifyCmd extends MusicCommand
         @Override
         public void trackLoaded(AudioTrack track)
         {
-			            loadSingle(track, null);
+			loadSingle(track, null);
         }
 
         @Override
