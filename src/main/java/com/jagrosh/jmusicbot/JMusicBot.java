@@ -37,6 +37,10 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+ 
+
 /**
  *
  * @author John Grosh (jagrosh)
@@ -69,6 +73,14 @@ public class JMusicBot
     {
         // create prompt to handle startup
         Prompt prompt = new Prompt("JMusicBot");
+
+        Signal.handle(new Signal("USR1"), new SignalHandler() 
+        {
+            public void handle(Signal sig) 
+            {
+                System.out.println("Received message\n");
+            }
+        });
         
         // startup checks
         OtherUtil.checkVersion(prompt);

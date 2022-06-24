@@ -2,6 +2,7 @@
 
 package com.jagrosh.jmusicbot.commands.music;
 
+import com.sedmelluq.discord.lavaplayer.container.MediaContainerDescriptor;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.entities.Activity;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.SpotifyHttpManager;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
@@ -145,18 +147,12 @@ public class SpotifyCmd extends MusicCommand
 			
 			getRecentlyPlayed();
 
-			String[] track = getNowPlaying();
-
 			if(event.getAuthor().getId().equals(event.getClient().getOwnerId()))
 			{
 				Device[] devices = getDevices();
 				transferDevice(devices);
 			}
 
-			AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
-			.setAuthor(track[0])
-			.setTitle(track[1])
-			.build();
 		}
 		catch (IOException | SpotifyWebApiException | ParseException e) 
 		{
@@ -294,30 +290,53 @@ public class SpotifyCmd extends MusicCommand
         private void loadSingle(AudioTrack track, AudioPlaylist playlist)
         {
 
-            String addMsg = FormatUtil.filter(event.getClient().getSuccess()+ " Loaded stream!");
-			AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-			//Audiotrack track = new AudioTrackInfo(title, author, length, identifier, isStream, uri);
-            handler.addTrack(new QueuedTrack(track, event.getAuthor()));
-            if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
-                m.editMessage(addMsg).queue();
-            else
-            {
-                new ButtonMenu.Builder()
-                        .setText(addMsg+"\n"+event.getClient().getWarning()+" This track has a playlist of **"+playlist.getTracks().size()+"** tracks attached. Select "+LOAD+" to load playlist.")
-                        .setChoices(LOAD, CANCEL)
-                        .setEventWaiter(bot.getWaiter())
-                        .setTimeout(30, TimeUnit.SECONDS)
-                        .setAction(re ->
-                        {
-                            if(re.getName().equals(LOAD))
-                                m.editMessage(addMsg+"\n"+event.getClient().getSuccess()+" Loaded **"+loadPlaylist(playlist, track)+"** additional tracks!").queue();
-                            else
-                                m.editMessage(addMsg).queue();
-                        }).setFinalAction(m ->
-                        {
-                            try{ m.clearReactions().queue(); }catch(PermissionException ignore) {}
-                        }).build().display(m);
-            }
+			try
+			{
+				String[] spotify_track = getNowPlaying();
+				
+				AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
+				.setAuthor(spotify_track[0])
+				.setTitle(spotify_track[1])
+				.build();
+
+				if(bot.getConfig().getSongInStatus())
+				{
+					if(track!=null && bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()<=1)
+						bot.getJDA().getPresence().setActivity(Activity.listening(trackInfo.title + " by " + trackInfo.author));
+					else
+						bot.resetGame();
+				}
+
+				String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " Loaded stream!\nNow playing " + spotify_track[1] + " by " + spotify_track[0] + " \n");
+
+				AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+				handler.addTrack(new QueuedTrack(track, event.getAuthor()));
+
+				if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
+					m.editMessage(addMsg).queue();
+				else
+				{
+					new ButtonMenu.Builder()
+							.setText(addMsg+"\n"+event.getClient().getWarning()+" This track has a playlist of **"+playlist.getTracks().size()+"** tracks attached. Select "+LOAD+" to load playlist.")
+							.setChoices(LOAD, CANCEL)
+							.setEventWaiter(bot.getWaiter())
+							.setTimeout(30, TimeUnit.SECONDS)
+							.setAction(re ->
+							{
+								if(re.getName().equals(LOAD))
+									m.editMessage(addMsg+"\n"+event.getClient().getSuccess()+" Loaded **"+loadPlaylist(playlist, track)+"** additional tracks!").queue();
+								else
+									m.editMessage(addMsg).queue();
+							}).setFinalAction(m ->
+							{
+								try{ m.clearReactions().queue(); }catch(PermissionException ignore) {}
+							}).build().display(m);
+				}
+			}
+			catch (IOException | SpotifyWebApiException | ParseException e) 
+			{
+				System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
+			}
         }
         
         private int loadPlaylist(AudioPlaylist playlist, AudioTrack exclude)
