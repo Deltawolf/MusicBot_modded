@@ -66,6 +66,26 @@ public class JMusicBot
                     return;
                 default:
             }
+
+        try 
+        {
+            Signal.handle(new Signal("USR1"), new SignalHandler() 
+            {
+                public void handle(Signal sig) 
+                {
+                    System.out.println("Received message\n");
+                }
+            });
+        }
+
+        catch(IllegalArgumentException ex)
+        {
+            System.out.println( "Some aspect of the configuration is "
+            + "invalid. Illegal argument exception with signaling was thrown.");
+            System.exit(1);
+        }
+
+
         startBot();
     }
     
@@ -73,14 +93,6 @@ public class JMusicBot
     {
         // create prompt to handle startup
         Prompt prompt = new Prompt("JMusicBot");
-
-        Signal.handle(new Signal("USR1"), new SignalHandler() 
-        {
-            public void handle(Signal sig) 
-            {
-                System.out.println("Received message\n");
-            }
-        });
         
         // startup checks
         OtherUtil.checkVersion(prompt);
