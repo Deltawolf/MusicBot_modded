@@ -88,13 +88,17 @@ public class PlayCmd extends MusicCommand
             return;
         }
 
-        if( event.getArgs().startsWith("goblin-mode"))
+        if( event.getArgs().startsWith("goblinmode"))
         {
             goblinMode = true;
+            event.reply("GOING GOBLIN!");
+            return;
         }
-        else if (event.getArgs().startsWith("scientist-mode"))
+        else if (event.getArgs().startsWith("scientistmode"))
         {
             goblinMode = false;
+            event.reply("Somewhat of a scientists myself...");
+            return;
         }
 
 
