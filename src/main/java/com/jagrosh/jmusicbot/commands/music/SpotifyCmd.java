@@ -3,6 +3,8 @@
 package com.jagrosh.jmusicbot.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerDescriptor;
+import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.tools.io.HttpInterface;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity;
@@ -34,6 +36,8 @@ import se.michaelthelin.spotify.model_objects.specification.PlayHistory;
 import se.michaelthelin.spotify.requests.data.player.GetCurrentUsersRecentlyPlayedTracksRequest;
 import org.apache.hc.core5.http.ParseException;
 
+
+
 import java.io.IOException;
 import java.net.URI;
 
@@ -51,6 +55,23 @@ import com.sedmelluq.discord.lavaplayer.track.info.AudioTrackInfoBuilder;
 
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
+
+import com.sedmelluq.discord.lavaplayer.track.AudioItem;
+import com.sedmelluq.discord.lavaplayer.track.AudioReference;
+
+import com.sedmelluq.discord.lavaplayer.container.matroska.MatroskaAudioTrack;
+import com.sedmelluq.discord.lavaplayer.container.mpeg.MpegAudioTrack;
+
+import com.sedmelluq.discord.lavaplayer.track.DelegatedAudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor;
+import java.util.List;
+import java.util.StringJoiner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static com.sedmelluq.discord.lavaplayer.container.Formats.MIME_AUDIO_WEBM;
+import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.COMMON;
+
 
 /**
  *
@@ -305,12 +326,14 @@ public class SpotifyCmd extends MusicCommand
 	private String[] updateTrack() throws IOException, SpotifyWebApiException, ParseException
 	{
 		String[] spotify_track = getNowPlaying();
-				
+
 		AudioTrackInfo trackInfo = AudioTrackInfoBuilder.empty()
 		.setAuthor(spotify_track[0])
 		.setTitle(spotify_track[1])
 		.build();
 
+		//SpotifyAudioTrack track = new SpotifyAudioTrack(trackInfo, bot.getPlayerManager().); 
+	
 		if(bot.getConfig().getSongInStatus())
 		{
 			if(bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()<=1)
@@ -322,6 +345,27 @@ public class SpotifyCmd extends MusicCommand
 		return spotify_track;
 	}
 
+	private class SpotifyAudioTrack extends DelegatedAudioTrack 
+	{
+		//private static final Logger log = LoggerFactory.getLogger(SpotifyAudioTrack.class);
+		private final AudioSourceManager sourceManager;
+	  
+		/**
+		 * @param trackInfo Track info
+		 * @param sourceManager Source manager which was used to find this track
+		 */
+		public SpotifyAudioTrack(AudioTrackInfo trackInfo, AudioSourceManager sourceManager)
+		{
+		  super(trackInfo);
+	  
+		  this.sourceManager = sourceManager;
+		}
+
+		@Override
+		public void process(LocalAudioTrackExecutor localExecutor) throws Exception {
+
+		}
+	}
     
     private class ResultHandler implements AudioLoadResultHandler
     {
@@ -343,6 +387,7 @@ public class SpotifyCmd extends MusicCommand
 			{
 
 				String[] spotify_track = updateTrack();
+
 
 				String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " Loaded stream!\nNow playing " + spotify_track[1] + " by " + spotify_track[0] + " \n");
 

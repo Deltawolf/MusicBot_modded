@@ -125,4 +125,12 @@ public class PlayerManager extends DefaultAudioPlayerManager
                     .collect(Collectors.toList());
         }
     }
+
+    private static class SpotifyAudioSourceManager
+    {
+        
+
+    }
+
+
 }

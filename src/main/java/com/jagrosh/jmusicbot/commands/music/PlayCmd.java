@@ -45,6 +45,7 @@ public class PlayCmd extends MusicCommand
     private final static String CANCEL = "\uD83D\uDEAB"; // 🚫
     
     private final String loadingEmoji;
+    private boolean goblinMode = false;
     
     public PlayCmd(Bot bot)
     {
@@ -57,6 +58,7 @@ public class PlayCmd extends MusicCommand
         this.beListening = true;
         this.bePlaying = false;
         this.children = new Command[]{new PlaylistCmd(bot)};
+        
     }
 
     @Override
@@ -76,6 +78,7 @@ public class PlayCmd extends MusicCommand
                     event.replyError("Only DJs can unpause the player!");
                 return;
             }
+        
             StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Play Commands:\n");
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <song title>` - plays the first result from Youtube");
             builder.append("\n`").append(event.getClient().getPrefix()).append(name).append(" <URL>` - plays the provided song, playlist, or stream");
@@ -84,10 +87,34 @@ public class PlayCmd extends MusicCommand
             event.reply(builder.toString());
             return;
         }
-        String args = event.getArgs().startsWith("<") && event.getArgs().endsWith(">") 
-                ? event.getArgs().substring(1,event.getArgs().length()-1) 
-                : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
-        event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
+
+        if( event.getArgs().startsWith("goblin-mode"))
+        {
+            goblinMode = true;
+        }
+        else if (event.getArgs().startsWith("scientist-mode"))
+        {
+            goblinMode = false;
+        }
+
+
+        String goblinString = "!play Goblins by nekrogoblikon";
+        if(goblinMode)
+        {
+
+        String args = goblinString.startsWith("<") && goblinString.endsWith(">") 
+        ? goblinString.substring(1,event.getArgs().length()-1) 
+        : goblinString.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : goblinString;
+        }
+        else
+        {
+            String args = event.getArgs().startsWith("<") && event.getArgs().endsWith(">") 
+            ? event.getArgs().substring(1,event.getArgs().length()-1) 
+            : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
+            event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
+        }
+
+
     }
     
     private class ResultHandler implements AudioLoadResultHandler
