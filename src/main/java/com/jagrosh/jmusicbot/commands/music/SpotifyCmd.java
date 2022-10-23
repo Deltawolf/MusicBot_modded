@@ -106,31 +106,31 @@ public class SpotifyCmd extends MusicCommand
 		this.refreshToken = bot.getRefreshToken();
 		this.clientSecret = bot.getClientSecret();
 
-		try 
-        {
-            Signal.handle(new Signal("USR1"), new SignalHandler() 
-            {
-                public void handle(Signal sig) 
-                {
-					try
-					{
-						updateTrack();
-					}
-					catch (IOException | SpotifyWebApiException | ParseException e) 
-					{
-						System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
-					}
+		// try 
+        // {
+        //     Signal.handle(new Signal("USR1"), new SignalHandler() 
+        //     {
+        //         public void handle(Signal sig) 
+        //         {
+		// 			try
+		// 			{
+		// 				updateTrack();
+		// 			}
+		// 			catch (IOException | SpotifyWebApiException | ParseException e) 
+		// 			{
+		// 				System.out.println("\nError: " + e.getMessage() + "\nCause: " + e.getCause() + "\n");
+		// 			}
 
-                }
-            });
-        }
+        //         }
+        //     });
+        // }
 
-        catch(IllegalArgumentException ex)
-        {
-            System.out.println( "Some aspect of the configuration is "
-            + "invalid. Illegal argument exception with signaling was thrown.");
-            System.exit(1);
-        }
+        // catch(IllegalArgumentException ex)
+        // {
+        //     System.out.println( "Some aspect of the configuration is "
+        //     + "invalid. Illegal argument exception with signaling was thrown.");
+        //     System.exit(1);
+        // }
     }
 
     @Override

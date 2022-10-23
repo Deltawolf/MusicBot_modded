@@ -91,7 +91,7 @@ public class PlayCmd extends MusicCommand
         if( event.getArgs().startsWith("goblinmode"))
         {
             goblinMode = true;
-            event.reply("GOING GOBLIN!");
+            event.reply(event.getArgs());
             return;
         }
         else if (event.getArgs().startsWith("scientistmode"))
@@ -102,13 +102,15 @@ public class PlayCmd extends MusicCommand
         }
 
 
-        String goblinString = "!play Goblins by nekrogoblikon";
+        String goblinString = "Goblins by nekrogoblikon";
         if(goblinMode)
         {
 
-        String args = goblinString.startsWith("<") && goblinString.endsWith(">") 
-        ? goblinString.substring(1,event.getArgs().length()-1) 
-        : goblinString.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : goblinString;
+            String args = goblinString.startsWith("<") && goblinString.endsWith(">") 
+            ? goblinString.substring(1,event.getArgs().length()-1) 
+            : goblinString.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : goblinString;
+            event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:"+goblinString, new ResultHandler(m,event,true)));
+            
         }
         else
         {
