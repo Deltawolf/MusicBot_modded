@@ -126,11 +126,5 @@ public class PlayerManager extends DefaultAudioPlayerManager
         }
     }
 
-    private static class SpotifyAudioSourceManager
-    {
-        
-
-    }
-
 
 }

@@ -61,6 +61,14 @@ public class PlayCmd extends MusicCommand
         
     }
 
+    public void setGoblinMode() {
+        goblinMode = true;
+    }
+
+    public void setScientistMode() {
+        goblinMode = false;
+    }
+
     @Override
     public void doCommand(CommandEvent event) 
     {
@@ -88,20 +96,6 @@ public class PlayCmd extends MusicCommand
             return;
         }
 
-        if( event.getArgs().startsWith("goblinmode"))
-        {
-            goblinMode = true;
-            event.reply(event.getArgs());
-            return;
-        }
-        else if (event.getArgs().startsWith("scientistmode"))
-        {
-            goblinMode = false;
-            event.reply("Somewhat of a scientists myself...");
-            return;
-        }
-
-
         String goblinString = "Goblins by nekrogoblikon";
         if(goblinMode)
         {
@@ -109,6 +103,7 @@ public class PlayCmd extends MusicCommand
             String args = goblinString.startsWith("<") && goblinString.endsWith(">") 
             ? goblinString.substring(1,event.getArgs().length()-1) 
             : goblinString.isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : goblinString;
+  
             event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), "ytsearch:"+goblinString, new ResultHandler(m,event,true)));
             
         }
@@ -118,6 +113,8 @@ public class PlayCmd extends MusicCommand
             ? event.getArgs().substring(1,event.getArgs().length()-1) 
             : event.getArgs().isEmpty() ? event.getMessage().getAttachments().get(0).getUrl() : event.getArgs();
             event.reply(loadingEmoji+" Loading... `["+args+"]`", m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), args, new ResultHandler(m,event,false)));
+            AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+
         }
 
 

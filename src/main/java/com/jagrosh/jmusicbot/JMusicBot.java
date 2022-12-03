@@ -111,6 +111,8 @@ public class JMusicBot
                         new LyricsCmd(bot),
                         new NowplayingCmd(bot),
                         new PlayCmd(bot),
+                        new GoblinMode(bot),
+                        new ScientistMode(bot),
                         new PlaySoundCmd(bot),
                         new LocalSearchCmd(bot),
                         new SpotifyCmd(bot),
