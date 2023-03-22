@@ -14,10 +14,6 @@ on:
     workflows: [Test]
     types:
       - completed
-env:
-    version_number: 0.3.8.1
-    info: Spotify
-
 jobs:
   build_jar:
     name: Build Jar
@@ -35,7 +31,7 @@ jobs:
         uses: datamonsters/replace-action@v2
         with:
           files: 'pom.xml'
-          replacements: 'Snapshot=${{ env.version_number }}'
+          replacements: 'Snapshot=${{ github.event.inputs.version_number }}'
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
       - name: Rename jar
@@ -62,16 +58,16 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ env.version_number }}
-          name: Version ${{ env.version_number }}
+          tag: ${{ github.event.inputs.version_number }}
+          name: Version ${{ github.event.inputs.version_number }}
           draft: true
           prerelease: false
           artifacts: "*.jar"
           body: |
-            ${{ env.info }}
+            ${{ github.event.inputs.info}}
             
             ---
             ### Setup
             https://jmusicbot.com/setup  
             https://jmusicbot.com/config  
-            # Download: [JMusicBot-${{ env.version_number }}.jar](https://github.com/jagrosh/MusicBot/releases/download/$version_number/JMusicBot-${{ env.version_number }}.jar)
+            # Download: [jmusicbot.jar](https://github.com/Deltawolf/MusicBot_Modded/releases/download/$version_number/jmusicbot.jar)
