@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 John Grosh <john.a.grosh@gmail.com>.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.jagrosh.jmusicbot.commands.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -26,39 +11,34 @@ import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.audio.QueuedTrack;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 
 /**
- *
- * @author John Grosh <john.a.grosh@gmail.com>
+ * @author Fumitaka Yoshikane (me@bracken.black)
  */
-public class SearchCmd extends MusicCommand 
-{
-    protected String searchPrefix = "ytsearch:";
+public final class LocalSearchCmd extends SearchCmd {
+
+	protected String searchPrefix = "reclocal:";
     private final OrderedMenu.Builder builder;
     private final String searchingEmoji;
-    
-    public SearchCmd(Bot bot)
-    {
+	
+	public LocalSearchCmd(Bot bot) {
         super(bot);
-        this.searchingEmoji = bot.getConfig().getSearching();
-        this.name = "search";
+
+        this.name = "localsearch";
+        this.searchPrefix = "reclocal:";
+		this.searchingEmoji = bot.getConfig().getSearching();
+        this.help = "searches local files for a provided query";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.arguments = "<query>";
-        this.help = "searches Youtube for a provided query";
-        this.beListening = true;
-        this.bePlaying = false;
-        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
-        builder = new OrderedMenu.Builder()
+		   builder = new OrderedMenu.Builder()
                 .allowTextInput(true)
                 .useNumbers()
                 .useCancelButton(true)
                 .setEventWaiter(bot.getWaiter())
                 .setTimeout(1, TimeUnit.MINUTES);
     }
+
     @Override
     public void doCommand(CommandEvent event) 
     {
@@ -70,7 +50,9 @@ public class SearchCmd extends MusicCommand
         event.reply(searchingEmoji+" Searching... `["+event.getArgs()+"]`", 
                 m -> bot.getPlayerManager().loadItemOrdered(event.getGuild(), searchPrefix + event.getArgs(), new ResultHandler(m,event)));
     }
-    
+
+
+
     private class ResultHandler implements AudioLoadResultHandler 
     {
         private final Message m;
@@ -122,7 +104,7 @@ public class SearchCmd extends MusicCommand
                     .setCancel((msg) -> {})
                     .setUsers(event.getAuthor())
                     ;
-            for(int i=0; i<4 && i<playlist.getTracks().size(); i++)
+            for(int i=0; i<10 && i<playlist.getTracks().size(); i++)
             {
                 AudioTrack track = playlist.getTracks().get(i);
                 builder.addChoices("`["+FormatUtil.formatTime(track.getDuration())+"]` [**"+track.getInfo().title+"**]("+track.getInfo().uri+")");

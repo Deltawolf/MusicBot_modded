@@ -39,7 +39,7 @@ public class Settings implements GuildSettingsProvider
     private String prefix;
     private double skipRatio;
 
-    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio)
+    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path)
     {
         this.manager = manager;
         try
@@ -71,9 +71,10 @@ public class Settings implements GuildSettingsProvider
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.skipRatio = skipRatio;
+
     }
     
-    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio)
+    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path)
     {
         this.manager = manager;
         this.textId = textId;
@@ -181,4 +182,6 @@ public class Settings implements GuildSettingsProvider
         this.skipRatio = skipRatio;
         this.manager.writeSettings();
     }
+
+
 }

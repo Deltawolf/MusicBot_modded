@@ -10,7 +10,10 @@ on:
         description: 'Description of this Release'
         required: true
         type: string
-
+  workflow_run:
+    workflows: [Test]
+    types:
+      - completed
 jobs:
   build_jar:
     name: Build Jar
@@ -18,10 +21,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up JDK 8
+      - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
-          java-version: '8'
+          java-version: '11'
           distribution: 'adopt'
           cache: maven
       - name: Set Version
@@ -32,12 +35,12 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
       - name: Rename jar
-        run: mv target/*-All.jar JMusicBot-${{ github.event.inputs.version_number }}.jar
+        run: mv target/*-All.jar jmusicbot.jar
       - name: Upload jar
         uses: actions/upload-artifact@v3
         with:
           name: jar
-          path: JMusicBot-${{ github.event.inputs.version_number }}.jar
+          path: jmusicbot.jar
           if-no-files-found: error
   create_release:
     name: Create Release
@@ -61,10 +64,10 @@ jobs:
           prerelease: false
           artifacts: "*.jar"
           body: |
-            ${{ github.event.inputs.info }}
+            ${{ github.event.inputs.info}}
             
             ---
             ### Setup
             https://jmusicbot.com/setup  
             https://jmusicbot.com/config  
-            # Download: [JMusicBot-${{ github.event.inputs.version_number }}.jar](https://github.com/jagrosh/MusicBot/releases/download/${{ github.event.inputs.version_number }}/JMusicBot-${{ github.event.inputs.version_number }}.jar)
+            # Download: [jmusicbot.jar](https://github.com/Deltawolf/MusicBot_Modded/releases/download/$version_number/jmusicbot.jar)

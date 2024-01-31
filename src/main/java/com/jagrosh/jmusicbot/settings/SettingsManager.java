@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public class SettingsManager implements GuildSettingsManager<Settings>
+public class SettingsManager implements GuildSettingsManager
 {
     private final static double SKIP_RATIO = .55;
     private final HashMap<Long,Settings> settings;
@@ -55,7 +55,8 @@ public class SettingsManager implements GuildSettingsManager<Settings>
                         o.has("default_playlist")? o.getString("default_playlist")           : null,
                         o.has("repeat_mode")     ? o.getEnum(RepeatMode.class, "repeat_mode"): RepeatMode.OFF,
                         o.has("prefix")          ? o.getString("prefix")                     : null,
-                        o.has("skip_ratio")      ? o.getDouble("skip_ratio")                 : SKIP_RATIO));
+                        o.has("skip_ratio")      ? o.getDouble("skip_ratio")                 : SKIP_RATIO,
+                        o.has("sfx_path")        ? o.getString("sfx_path")                   : null));
             });
         } catch(IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("Failed to load server settings (this is normal if no settings have been set yet): "+e);
@@ -81,7 +82,7 @@ public class SettingsManager implements GuildSettingsManager<Settings>
     
     private Settings createDefaultSettings()
     {
-        return new Settings(this, 0, 0, 0, 100, null, RepeatMode.OFF, null, SKIP_RATIO);
+        return new Settings(this, 0, 0, 0, 100, null, RepeatMode.OFF, null, SKIP_RATIO, null);
     }
     
     protected void writeSettings()
