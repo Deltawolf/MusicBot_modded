@@ -1,0 +1,149 @@
+ Error:  COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[108,67] cannot find symbol
+  symbol:   class LocalAudioSourceManager
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[113,35] cannot find symbol
+  symbol:   class AudioPlayerManager
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[113,63] cannot find symbol
+  symbol:   class AudioReference
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[113,16] cannot find symbol
+  symbol:   class AudioItem
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/settings/SettingsManager.java:[52,50] no suitable constructor found for Settings(com.jagrosh.jmusicbot.settings.SettingsManager,o.has("tex[...] null,o.has("voi[...] null,o.has("dj_[...] null,int,o.has("def[...] null,o.has("rep[...]e.OFF,o.has("pre[...] null,double,o.has("sfx[...] null,o.has("que[...].FAIR)
+    constructor com.jagrosh.jmusicbot.settings.Settings.Settings(com.jagrosh.jmusicbot.settings.SettingsManager,java.lang.String,java.lang.String,java.lang.String,int,java.lang.String,com.jagrosh.jmusicbot.settings.RepeatMode,java.lang.String,double,com.jagrosh.jmusicbot.settings.QueueType) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor com.jagrosh.jmusicbot.settings.Settings.Settings(com.jagrosh.jmusicbot.settings.SettingsManager,long,long,long,int,java.lang.String,com.jagrosh.jmusicbot.settings.RepeatMode,java.lang.String,double,com.jagrosh.jmusicbot.settings.QueueType) is not applicable
+      (actual and formal argument lists differ in length)
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[80,31] incompatible types: com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager cannot be converted to com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[112,9] method does not override or implement a method from a supertype
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[116,22] cannot find symbol
+  symbol:   class AudioTrack
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[118,66] cannot find symbol
+  symbol:   class AudioReference
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[118,38] non-static variable super cannot be referenced from a static context
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[119,67] cannot find symbol
+  symbol:   class AudioTrack
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[120,44] cannot find symbol
+  symbol:   class AudioTrack
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[126,28] cannot find symbol
+  symbol:   class BasicAudioPlaylist
+  location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/AudioHandler.java:[190,56] method onTrackUpdate in class com.jagrosh.jmusicbot.audio.NowplayingHandler cannot be applied to given types;
+  required: long,com.sedmelluq.discord.lavaplayer.track.AudioTrack,com.jagrosh.jmusicbot.audio.AudioHandler
+  found: <nulltype>
+  reason: actual and formal argument lists differ in length
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/AudioHandler.java:[214,48] method onTrackUpdate in class com.jagrosh.jmusicbot.audio.NowplayingHandler cannot be applied to given types;
+  required: long,com.sedmelluq.discord.lavaplayer.track.AudioTrack,com.jagrosh.jmusicbot.audio.AudioHandler
+  found: com.sedmelluq.discord.lavaplayer.track.AudioTrack
+  reason: actual and formal argument lists differ in length
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/AudioHandler.java:[290,39] cannot find symbol
+  symbol:   method formatTime(long)
+  location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/SpotifyCmd.java:[395,88] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/SpotifyCmd.java:[431,76] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[73,36] cannot find symbol
+  symbol:   method formatTime(long)
+  location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[77,78] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[79,40] cannot find symbol
+  symbol:   method formatTime(long)
+  location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[95,48] cannot find symbol
+  symbol:   method formatTime(long)
+  location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[99,90] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[101,55] cannot find symbol
+  symbol:   method formatTime(long)
+  location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[110,51] cannot find symbol
+  symbol:   method formatTime(long)
+  location: class com.jagrosh.jmusicbot.utils.FormatUtil
+[INFO] 25 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  30.515 s
+[INFO] Finished at: 2024-07-09T18:42:49Z
+[INFO] ------------------------------------------------------------------------
+Error:  Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.1:compile (default-compile) on project JMusicBot: Compilation failure: Compilation failure: 
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[108,67] cannot find symbol
+Error:    symbol:   class LocalAudioSourceManager
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[113,35] cannot find symbol
+Error:    symbol:   class AudioPlayerManager
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[113,63] cannot find symbol
+Error:    symbol:   class AudioReference
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[113,16] cannot find symbol
+Error:    symbol:   class AudioItem
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/settings/SettingsManager.java:[52,50] no suitable constructor found for Settings(com.jagrosh.jmusicbot.settings.SettingsManager,o.has("tex[...] null,o.has("voi[...] null,o.has("dj_[...] null,int,o.has("def[...] null,o.has("rep[...]e.OFF,o.has("pre[...] null,double,o.has("sfx[...] null,o.has("que[...].FAIR)
+Error:      constructor com.jagrosh.jmusicbot.settings.Settings.Settings(com.jagrosh.jmusicbot.settings.SettingsManager,java.lang.String,java.lang.String,java.lang.String,int,java.lang.String,com.jagrosh.jmusicbot.settings.RepeatMode,java.lang.String,double,com.jagrosh.jmusicbot.settings.QueueType) is not applicable
+Error:        (actual and formal argument lists differ in length)
+Error:      constructor com.jagrosh.jmusicbot.settings.Settings.Settings(com.jagrosh.jmusicbot.settings.SettingsManager,long,long,long,int,java.lang.String,com.jagrosh.jmusicbot.settings.RepeatMode,java.lang.String,double,com.jagrosh.jmusicbot.settings.QueueType) is not applicable
+Error:        (actual and formal argument lists differ in length)
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[80,31] incompatible types: com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager cannot be converted to com.sedmelluq.discord.lavaplayer.source.AudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[112,9] method does not override or implement a method from a supertype
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[116,22] cannot find symbol
+Error:    symbol:   class AudioTrack
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[118,66] cannot find symbol
+Error:    symbol:   class AudioReference
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[118,38] non-static variable super cannot be referenced from a static context
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[119,67] cannot find symbol
+Error:    symbol:   class AudioTrack
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[120,44] cannot find symbol
+Error:    symbol:   class AudioTrack
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/PlayerManager.java:[126,28] cannot find symbol
+Error:    symbol:   class BasicAudioPlaylist
+Error:    location: class com.jagrosh.jmusicbot.audio.PlayerManager.RecursiveLocalAudioSourceManager
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/AudioHandler.java:[190,56] method onTrackUpdate in class com.jagrosh.jmusicbot.audio.NowplayingHandler cannot be applied to given types;
+Error:    required: long,com.sedmelluq.discord.lavaplayer.track.AudioTrack,com.jagrosh.jmusicbot.audio.AudioHandler
+Error:    found: <nulltype>
+Error:    reason: actual and formal argument lists differ in length
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/AudioHandler.java:[214,48] method onTrackUpdate in class com.jagrosh.jmusicbot.audio.NowplayingHandler cannot be applied to given types;
+Error:    required: long,com.sedmelluq.discord.lavaplayer.track.AudioTrack,com.jagrosh.jmusicbot.audio.AudioHandler
+Error:    found: com.sedmelluq.discord.lavaplayer.track.AudioTrack
+Error:    reason: actual and formal argument lists differ in length
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/audio/AudioHandler.java:[290,39] cannot find symbol
+Error:    symbol:   method formatTime(long)
+Error:    location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/SpotifyCmd.java:[395,88] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/SpotifyCmd.java:[431,76] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[73,36] cannot find symbol
+Error:    symbol:   method formatTime(long)
+Error:    location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[77,78] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[79,40] cannot find symbol
+Error:    symbol:   method formatTime(long)
+Error:    location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[95,48] cannot find symbol
+Error:    symbol:   method formatTime(long)
+Error:    location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[99,90] incompatible types: net.dv8tion.jda.api.entities.User cannot be converted to com.jagrosh.jmusicbot.audio.RequestMetadata
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[101,55] cannot find symbol
+Error:    symbol:   method formatTime(long)
+Error:    location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  /home/runner/work/MusicBot_modded/MusicBot_modded/src/main/java/com/jagrosh/jmusicbot/commands/music/LocalSearchCmd.java:[110,51] cannot find symbol
+Error:    symbol:   method formatTime(long)
+Error:    location: class com.jagrosh.jmusicbot.utils.FormatUtil
+Error:  -> [Help 1]
+Error:  
+Error:  To see the full stack trace of the errors, re-run Maven with the -e switch.
+Error:  Re-run Maven using the -X switch to enable full debug logging.
+Error:  
+Error:  For more information about the errors and possible solutions, please read the following articles:
+Error:  [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+Error: Process completed with exit code 1.
