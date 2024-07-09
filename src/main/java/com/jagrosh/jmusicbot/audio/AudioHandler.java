@@ -287,7 +287,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler
                 title = track.getInfo().uri;
             return "**"+title+"** ["+(userid==0 ? "autoplay" : "<@"+userid+">")+"]"
                     + "\n" + getStatusEmoji() + " "
-                    + "[" + FormatUtil.formatTime(track.getDuration()) + "] "
+                    + "[" + TimeUtil.formatTime(track.getDuration()) + "] "
                     + FormatUtil.volumeIcon(audioPlayer.getVolume());
         }
         else return "No music playing " + STOP_EMOJI + " " + FormatUtil.volumeIcon(audioPlayer.getVolume());

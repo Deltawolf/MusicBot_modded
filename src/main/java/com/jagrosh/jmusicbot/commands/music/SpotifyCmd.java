@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
 
 import static com.sedmelluq.discord.lavaplayer.container.Formats.MIME_AUDIO_WEBM;
 import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.COMMON;
-
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
 
 /**
  *
