@@ -212,14 +212,13 @@ public class OtherUtil
         }
     }
 
-
-/*TODO: IF THIS IS STUPID, REMOVE THIS SHIT*/ 
     /**
      * Checks if the bot JMusicBot is being run on is supported & returns the reason if it is not.
      * @return A string with the reason, or null if it is supported.
      */
     public static String getUnsupportedBotReason(JDA jda) 
     {
+        return null; //THIS IS THE PUBLIC BOT CHECK. DON'T LET HIM OVERWRITE THIS REEE
         if (jda.getSelfUser().getFlags().contains(User.UserFlag.VERIFIED_BOT))
             return "The bot is verified. Using JMusicBot in a verified bot is not supported.";
 
