@@ -63,7 +63,7 @@
             <version>2.2.1</version>
         </dependency>
         <dependency>
-            <groupId>dev.lavalink-youtube-source</groupId>
+            <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
             <version>1.4.0</version>
         </dependency>
