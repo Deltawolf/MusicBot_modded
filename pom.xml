@@ -38,6 +38,11 @@
     </repositories>
 
     <dependencies>
+	<dependency>
+        	<groupId>se.michaelthelin.spotify</groupId>
+        	<artifactId>spotify-web-api-java</artifactId>
+        	<version>7.1.0</version>
+    	</dependency>
         <!-- Discord Dependencies -->
         <dependency>
             <groupId>net.dv8tion</groupId>
