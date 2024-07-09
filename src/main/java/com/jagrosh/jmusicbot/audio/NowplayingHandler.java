@@ -133,7 +133,7 @@ public class NowplayingHandler
     }
     
     // "event"-based methods
-    public void onTrackUpdate(long guildId, AudioTrack track, AudioHandler handler)
+    public void onTrackUpdate(AudioTrack track)
     {
         // update bot status if applicable
         if(bot.getConfig().getSongInStatus())
