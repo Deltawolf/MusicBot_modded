@@ -14,6 +14,7 @@ import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 import com.jagrosh.jmusicbot.utils.TimeUtil;
 import net.dv8tion.jda.api.entities.Message;
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
 
 /**
  * @author Fumitaka Yoshikane (me@bracken.black)
