@@ -13,6 +13,11 @@
             <url>https://m2.dv8tion.net/releases</url>
         </repository>
         <repository>
+            <id>mvnrepository</id>
+            <name>mvnrepository</name>
+            <url>https://mvnrepository.com/</url>
+        </repository>
+        <repository>
             <id>central</id>
             <name>bintray</name>
             <url>https://jcenter.bintray.com</url>
