@@ -17,6 +17,7 @@ package com.jagrosh.jmusicbot.audio;
 
 import com.dunctebot.sourcemanagers.DuncteBotSources;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
 import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -41,6 +42,7 @@ import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -66,7 +68,7 @@ public class PlayerManager extends DefaultAudioPlayerManager
         //AudioSourceManagers.registerRemoteSources(this);
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(t -> registerSourceManager(t));
 
-        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(true);
+        YoutubeAudioSourceManager yt = setupYoutubeAudioSourceManager();
         registerSourceManager(yt);
 
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
@@ -108,6 +110,41 @@ public class PlayerManager extends DefaultAudioPlayerManager
         } else
             handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
         return handler;
+    }
+
+    private YoutubeAudioSourceManager setupYoutubeAudioSourceManager()
+    {
+        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(true);
+        yt.setPlaylistPageCount(bot.getConfig().getMaxYTPlaylistPages());
+
+        // OAuth2 setup
+        if (bot.getConfig().useYoutubeOauth2())
+        {
+            String token = null;
+            try
+            {
+                token = Files.readString(OtherUtil.getPath("youtubetoken.txt"));
+            }
+            catch (NoSuchFileException e)
+            {
+                /* ignored */
+            }
+            catch (IOException e)
+            {
+                LOGGER.warn("Failed to read YouTube OAuth2 token file: {}", e.getMessage());
+                return yt;
+            }
+            LOGGER.debug("Read YouTube OAuth2 refresh token from youtubetoken.txt");
+            try
+            {
+                yt.useOauth2(token, false);
+            }
+            catch (Exception e)
+            {
+                LOGGER.warn("Failed to authorise with YouTube. If this issue persists, delete the youtubetoken.txt file to reauthorise.", e);
+            }
+        }
+        return yt;
     }
 
     private static class RecursiveLocalAudioSourceManager extends LocalAudioSourceManager
