@@ -66,8 +66,7 @@ public class PlayerManager extends DefaultAudioPlayerManager
         //AudioSourceManagers.registerRemoteSources(this);
         TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(t -> registerSourceManager(t));
 
-        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(true, new WebWithThumbnail(), new AndroidMusicWithThumbnail(), new TvHtml5EmbeddedWithThumbnail(), new MusicWithThumbnail());
-        yt.setPlaylistPageCount(bot.getConfig().getMaxYTPlaylistPages());
+        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(true);
         registerSourceManager(yt);
 
         registerSourceManager(SoundCloudAudioSourceManager.createDefault());
