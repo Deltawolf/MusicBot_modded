@@ -37,7 +37,7 @@ jobs:
       - name: Rename jar
         run: mv target/*-All.jar jmusicbot.jar
       - name: Upload jar
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jar
           path: jmusicbot.jar
