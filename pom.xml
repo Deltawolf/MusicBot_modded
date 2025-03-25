@@ -66,11 +66,17 @@
             <artifactId>lavaplayer</artifactId>
             <version>2.2.1</version>
         </dependency>
-        <dependency>
+	<dependency>
+  	    <groupId>dev.lavalink.youtube</groupId>
+  	    <artifactId>youtube-plugin</artifactId>
+  	    <version>294d3c50380705fe8de585aabd960f612f79d083</version>
+	</dependency>
+        <!-- ><dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
             <version>1.11.5</version>
         </dependency>
+	 <!-->   
 	<dependency>
 	    <groupId>com.github.jagrosh</groupId>
 	    <artifactId>JLyrics</artifactId>
