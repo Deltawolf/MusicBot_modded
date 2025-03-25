@@ -34,12 +34,16 @@
             <id>arbjergDev</id>
             <name>Lavalink Repository</name>
             <url>https://maven.lavalink.dev/releases</url>
+        </repository>
+	<repository>
+            <id>lavalink-snapshots</id>
+            <name>Lavalink Repository Snapshots</name>
+            <url>https://maven.lavalink.dev/snapshots/</url>
 	    <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
             </snapshots>
-        </repository>
-                <repository>
+        </repository>    
+        <repository>
             <id>dv8tion</id>
             <name>m2-dv8tion</name>
             <url>https://m2.dv8tion.net/releases</url>
