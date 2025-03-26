@@ -93,12 +93,13 @@
 	    <artifactId>JLyrics</artifactId>
 	    <version>master-SNAPSHOT</version>
 	</dependency>
+	    	    	<!-->
         <dependency>
             <groupId>com.dunctebot</groupId>
             <artifactId>sourcemanagers</artifactId>
             <version>1.9.0</version>
         </dependency>
-	    	<!-->
+
 
         <!-- Misc Internal Dependencies -->
         <dependency>
