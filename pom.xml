@@ -56,6 +56,7 @@
         	<artifactId>spotify-web-api-java</artifactId>
         	<version>7.1.0</version>
     	</dependency>
+	    
         <!-- Discord Dependencies -->
         <dependency>
             <groupId>net.dv8tion</groupId>
@@ -75,25 +76,26 @@
             <version>2.2.1</version>
         </dependency>
 
+		<!-->    
 	<dependency>
   	    <groupId>dev.lavalink.youtube</groupId>
   	    <artifactId>youtube-plugin</artifactId>
   	    <version>294d3c50380705fe8de585aabd960f612f79d083</version>
 	</dependency>
-
+	<!-->
 
 	    <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
             <version>1.12.0</version>
         </dependency>
-	<!-->
+
 	<dependency>
 	    <groupId>com.github.jagrosh</groupId>
 	    <artifactId>JLyrics</artifactId>
 	    <version>master-SNAPSHOT</version>
 	</dependency>
-	    	    	<!-->
+	    	   
         <dependency>
             <groupId>com.dunctebot</groupId>
             <artifactId>sourcemanagers</artifactId>
