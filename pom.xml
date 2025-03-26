@@ -72,7 +72,7 @@
 	<dependency>
 	    <groupId>com.github.jagrosh</groupId>
 	    <artifactId>JLyrics</artifactId>
-	    <version>master-SNAPSHOT</version>
+	    <version>-SNAPSHOT</version>
 	</dependency>
         
         <!-- Misc Internal Dependencies -->
