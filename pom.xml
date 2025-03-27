@@ -5,7 +5,7 @@
     <artifactId>JMusicBot</artifactId>
     <version>Snapshot</version>
     <packaging>jar</packaging>
-
+  
     <repositories>
         <repository>
             <id>mvnrepository</id>
