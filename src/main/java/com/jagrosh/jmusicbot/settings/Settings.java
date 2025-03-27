@@ -36,10 +36,11 @@ public class Settings implements GuildSettingsProvider
     private int volume;
     private String defaultPlaylist;
     private RepeatMode repeatMode;
+    private QueueType queueType;
     private String prefix;
     private double skipRatio;
 
-    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path)
+    public Settings(SettingsManager manager, String textId, String voiceId, String roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path, QueueType queueType)
     {
         this.manager = manager;
         try
@@ -71,10 +72,10 @@ public class Settings implements GuildSettingsProvider
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.skipRatio = skipRatio;
-
+        this.queueType = queueType;
     }
     
-    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, String path)
+    public Settings(SettingsManager manager, long textId, long voiceId, long roleId, int volume, String defaultPlaylist, RepeatMode repeatMode, String prefix, double skipRatio, QueueType queueType)
     {
         this.manager = manager;
         this.textId = textId;
@@ -85,6 +86,7 @@ public class Settings implements GuildSettingsProvider
         this.repeatMode = repeatMode;
         this.prefix = prefix;
         this.skipRatio = skipRatio;
+        this.queueType = queueType;
     }
     
     // Getters
@@ -126,6 +128,11 @@ public class Settings implements GuildSettingsProvider
     public double getSkipRatio()
     {
         return skipRatio;
+    }
+
+    public QueueType getQueueType()
+    {
+        return queueType;
     }
 
     @Override
@@ -183,5 +190,9 @@ public class Settings implements GuildSettingsProvider
         this.manager.writeSettings();
     }
 
-
+    public void setQueueType(QueueType queueType)
+    {
+        this.queueType = queueType;
+        this.manager.writeSettings();
+    }
 }

@@ -71,7 +71,7 @@ import org.slf4j.LoggerFactory;
 
 import static com.sedmelluq.discord.lavaplayer.container.Formats.MIME_AUDIO_WEBM;
 import static com.sedmelluq.discord.lavaplayer.tools.FriendlyException.Severity.COMMON;
-
+import com.jagrosh.jmusicbot.audio.RequestMetadata;
 
 /**
  *
@@ -392,7 +392,7 @@ public class SpotifyCmd extends MusicCommand
 				String addMsg = FormatUtil.filter(event.getClient().getSuccess() + " Loaded stream!\nNow playing " + spotify_track[1] + " by " + spotify_track[0] + " \n");
 
 				AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-				handler.addTrack(new QueuedTrack(track, event.getAuthor()));
+				handler.addTrack(new QueuedTrack(track, RequestMetadata.fromResultHandler(track, event)));
 
 				if(playlist==null || !event.getSelfMember().hasPermission(event.getTextChannel(), Permission.MESSAGE_ADD_REACTION))
 					m.editMessage(addMsg).queue();
@@ -428,7 +428,7 @@ public class SpotifyCmd extends MusicCommand
                 if(!bot.getConfig().isTooLong(track) && !track.equals(exclude))
                 {
                     AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-                    handler.addTrack(new QueuedTrack(track, event.getAuthor()));
+					handler.addTrack(new QueuedTrack(track, RequestMetadata.fromResultHandler(track, event)));
                     count[0]++;
                 }
             });

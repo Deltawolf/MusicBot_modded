@@ -15,21 +15,34 @@
  */
 package com.jagrosh.jmusicbot.audio;
 
+import com.dunctebot.sourcemanagers.DuncteBotSources;
 import com.jagrosh.jmusicbot.Bot;
+import com.jagrosh.jmusicbot.utils.OtherUtil;
+import com.sedmelluq.discord.lavaplayer.container.MediaContainerRegistry;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioItem;
+import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.beam.BeamAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.getyarn.GetyarnAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.nico.NicoAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioReference;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioItem;
 import com.sedmelluq.discord.lavaplayer.track.BasicAudioPlaylist;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import net.dv8tion.jda.api.entities.Guild;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -43,6 +56,7 @@ import java.util.stream.Collectors;
  */
 public class PlayerManager extends DefaultAudioPlayerManager
 {
+    private final static Logger LOGGER = LoggerFactory.getLogger(PlayerManager.class);
     private final Bot bot;
 
     public PlayerManager(Bot bot)
@@ -52,7 +66,24 @@ public class PlayerManager extends DefaultAudioPlayerManager
 
     public void init()
     {
-        AudioSourceManagers.registerRemoteSources(this);
+        //AudioSourceManagers.registerRemoteSources(this);
+        TransformativeAudioSourceManager.createTransforms(bot.getConfig().getTransforms()).forEach(t -> registerSourceManager(t));
+
+        YoutubeAudioSourceManager yt = setupYoutubeAudioSourceManager();
+        registerSourceManager(yt);
+
+        registerSourceManager(SoundCloudAudioSourceManager.createDefault());
+        registerSourceManager(new BandcampAudioSourceManager());
+        registerSourceManager(new VimeoAudioSourceManager());
+        registerSourceManager(new TwitchStreamAudioSourceManager());
+        registerSourceManager(new BeamAudioSourceManager());
+        registerSourceManager(new GetyarnAudioSourceManager());
+        registerSourceManager(new NicoAudioSourceManager());
+        registerSourceManager(new HttpAudioSourceManager(MediaContainerRegistry.DEFAULT_REGISTRY));
+
+        AudioSourceManagers.registerLocalSource(this);
+
+        DuncteBotSources.registerAll(this, "en-US");
         AudioSourceManagers.registerLocalSource(this);
         registerSourceManager(new RecursiveLocalAudioSourceManager());
         source(YoutubeAudioSourceManager.class).setPlaylistPageCount(10);
@@ -80,6 +111,41 @@ public class PlayerManager extends DefaultAudioPlayerManager
         } else
             handler = (AudioHandler) guild.getAudioManager().getSendingHandler();
         return handler;
+    }
+
+    private YoutubeAudioSourceManager setupYoutubeAudioSourceManager()
+    {
+        YoutubeAudioSourceManager yt = new YoutubeAudioSourceManager(true);
+        yt.setPlaylistPageCount(bot.getConfig().getMaxYTPlaylistPages());
+
+        // OAuth2 setup
+        if (bot.getConfig().useYoutubeOauth2())
+        {
+            String token = null;
+            try
+            {
+                token = Files.readString(OtherUtil.getPath("youtubetoken.txt"));
+            }
+            catch (NoSuchFileException e)
+            {
+                /* ignored */
+            }
+            catch (IOException e)
+            {
+                LOGGER.warn("Failed to read YouTube OAuth2 token file: {}", e.getMessage());
+                return yt;
+            }
+            LOGGER.debug("Read YouTube OAuth2 refresh token from youtubetoken.txt");
+            try
+            {
+                yt.useOauth2(token, false);
+            }
+            catch (Exception e)
+            {
+                LOGGER.warn("Failed to authorise with YouTube. If this issue persists, delete the youtubetoken.txt file to reauthorise.", e);
+            }
+        }
+        return yt;
     }
 
     private static class RecursiveLocalAudioSourceManager extends LocalAudioSourceManager
