@@ -75,19 +75,28 @@
             <artifactId>lavaplayer</artifactId>
             <version>2.2.1</version>
         </dependency>
+
+	<dependency>
+  		<groupId>dev.lavalink.youtube</groupId>
+  		<artifactId>youtube-plugin</artifactId>
+  		<version>008faf9f7a39c3f98d24fc1d5c98a9dc960a377c</version>
+	</dependency>
+
+
+
+		<!-->    
+	    
         <dependency>
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
             <version>1.13.0</version>
         </dependency>
+<dependency>
+  <groupId>dev.lavalink.youtube</groupId>
+  <artifactId>youtube-plugin</artifactId>
+  <version>008faf9f7a39c3f98d24fc1d5c98a9dc960a377c</version>
+</dependency>
 
-
-		<!-->    
-	        <dependency>
-            <groupId>dev.lavalink.youtube</groupId>
-            <artifactId>youtube-plugin</artifactId>
-            <version>130561e2d2f76605eb08b2c9cc4facbf400caccb</version>
-        </dependency>
 
 
 
