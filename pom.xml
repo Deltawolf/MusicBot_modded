@@ -68,10 +68,7 @@
             <artifactId>JDA</artifactId>
             <version>5.6.1</version>
         </dependency>
-                <dependency>
-            <groupId>com.jagrosh</groupId>
-            <artifactId>jda-utilities</artifactId>
-            <version>3.0.5</version>
+        <dependency>
             <groupId>pw.chew</groupId>
             <artifactId>jda-chewtils</artifactId>
             <version>2.1</version>
