@@ -8,7 +8,7 @@ import com.jagrosh.jdautilities.command.impl.CommandClientImpl;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
 import com.jagrosh.jmusicbot.Bot;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 public class GoblinMode extends MusicCommand {
 

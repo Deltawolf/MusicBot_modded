@@ -336,7 +336,7 @@ public class SpotifyCmd extends MusicCommand
 	
 		if(bot.getConfig().getSongInStatus())
 		{
-			if(bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inVoiceChannel()).count()<=1)
+			if(bot.getJDA().getGuilds().stream().filter(g -> g.getSelfMember().getVoiceState().inAudioChannel()).count()<=1)
 				bot.getJDA().getPresence().setActivity(Activity.listening(trackInfo.title + " by " + trackInfo.author));
 			else
 				bot.resetGame();
